@@ -66,7 +66,7 @@ export const searchUsers = query({
     handler: async (ctx, args) => {
         const currentUser = await ctx.runQuery(internal.users.getCurrentUser);
 
-        // Dont search if query is too short
+        // Don't search if query is too short
         if (args.query.length < 2) {
             return [];
         }
