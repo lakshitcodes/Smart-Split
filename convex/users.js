@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { internal } from "./_generated/api";
 
 export const store = mutation({
     args: {},
@@ -61,7 +62,7 @@ export const getCurrentUser = query({
 });
 
 export const searchUsers = query({
-    args: { query: v.string },
+    args: { query: v.string() },
     handler: async (ctx, args) => {
         const currentUser = await ctx.runQuery(internal.users.getCurrentUser);
 
