@@ -45,17 +45,17 @@ export const getExpensesBetweenUsers = query({
         /* 3. Settlements between the two of us (groupId = undefined)*/
         const settlements = await ctx.db
             .query("settlements")
-            .filter(q =>
+            .filter((q) =>
                 q.and(
                     q.eq(q.field("groupId"), undefined),
                     q.or(
                         q.and(
                             q.eq(q.field("paidByUserId"), me._id),
-                            q.eq(q.field("receivedByUserId "), userId)
+                            q.eq(q.field("receivedByUserId"), userId)
                         ),
                         q.and(
                             q.eq(q.field("paidByUserId"), userId),
-                            q.eq(q.field("receivedByUserId "), me._id)
+                            q.eq(q.field("receivedByUserId"), me._id)
                         ),
                     )
                 )
@@ -67,7 +67,7 @@ export const getExpensesBetweenUsers = query({
 
         /* 4. Compute running balances */
         let balance = 0;
-        for await (const e of expenses) {
+        for (const e of expenses) {
             if (e.paidByUserId === me._id) {
                 const split = e.splits.find((s) => s.userId === userId && !s.paid);
                 if (split) {
