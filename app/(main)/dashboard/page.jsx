@@ -47,7 +47,6 @@ const Dashboard = () => {
         </div>
       ) : (
         <>
-          '
           <div className="flex items-center justify-between">
             <h1 className="text-5xl gradient-title">Dashboard</h1>
             <Button asChild>
