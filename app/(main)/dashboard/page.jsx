@@ -153,7 +153,7 @@ const Dashboard = () => {
               {/* Expense Summary */}
               <ExpenseSummary
                 monthlySpending={monthlySpending}
-                totalSpending={totalSpending}
+                totalSpent={totalSpending}
               />
             </div>
             {/* right column */}
