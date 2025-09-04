@@ -119,7 +119,7 @@ export const getUserBalances = query({
             youOwe, // total amount user owes
             youAreOwed, // total amount user is owed
             totalBalance: youAreOwed - youOwe, // Net balance
-            oweDetails: { youOwe: youOweList, youAreOwed: youAreOwedByList }, // Detailed breakdown
+            oweDetails: { youOwe: youOweList, youAreOwedBy: youAreOwedByList }, // Detailed breakdown
         };
     },
 });
@@ -144,7 +144,7 @@ export const getTotalSpent = query({
         );
 
         let totalSpent = 0;
-        userExpense.forEach((expense) => {
+        userExpenses.forEach((expense) => {
             const userSplit = expense.splits.find(
                 (split) => split.userId === user._id
             );
@@ -218,7 +218,7 @@ export const getUserGroups = query({
     handler: async (ctx) => {
         const user = await ctx.runQuery(internal.users.getCurrentUser);
 
-        const allGroups = await ctx.db("groups").collect();
+        const allGroups = await ctx.db.query("groups").collect();
         const groups = allGroups.filter((group) => {
             group.members.some((member) => member.userId === user._id)
         })
