@@ -85,7 +85,7 @@ const GroupPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         <div className="lg:col-span-2">
           <Card>
-            <CardHeader className="pb-2 ">
+            <CardHeader>
               <CardTitle className="text-xl">Group Balances</CardTitle>
             </CardHeader>
             <CardContent>
@@ -95,7 +95,7 @@ const GroupPage = () => {
         </div>
         <div>
           <Card>
-            <CardHeader className="pb-2 ">
+            <CardHeader>
               <CardTitle className="text-xl">Members</CardTitle>
             </CardHeader>
             <CardContent>

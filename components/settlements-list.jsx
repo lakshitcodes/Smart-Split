@@ -45,7 +45,7 @@ const SettlementsList = ({
 
         return (
           <Card
-            className="hover:bg-muted/30 transition-colors"
+            className="hover:bg-muted/50 transition-transform duration-200 hover:-translate-y-1"
             key={settlement._id}
           >
             <CardContent className="py-4">

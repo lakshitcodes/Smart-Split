@@ -76,7 +76,7 @@ const ExpenseList = ({
 
         return (
           <Card
-            className="hover:bg-muted/30 transition-colors"
+            className="hover:bg-muted/50 transition-transform duration-200 hover:-translate-y-1"
             key={expense._id}
           >
             <CardContent className="py-4">

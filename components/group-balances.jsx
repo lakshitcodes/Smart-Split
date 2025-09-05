@@ -5,6 +5,7 @@ import { useConvexQuery } from "@/hooks/use-convex-query";
 import { ArrowDownCircle, ArrowUpCircle } from "lucide-react";
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import Link from "next/link";
 
 const GroupBalances = ({ balances }) => {
   const { data: currentUser } = useConvexQuery(api.users.getCurrentUser);
@@ -100,27 +101,29 @@ const GroupBalances = ({ balances }) => {
               </h3>
               <div className="space-y-3">
                 {owedByMembers.map((member) => (
-                  <div
-                    key={member.id}
-                    className="flex items-center justify-between"
-                  >
-                    <div className="flex items-center gap-2">
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={member.imageUrl} />
-                        <AvatarFallback>
-                          {member.name?.charAt(0) ?? "?"}
-                        </AvatarFallback>
-                      </Avatar>
-                      <span className="text-sm">{member.name}</span>
+                  <Link href={`/person/${member.id}`} key={member.id}>
+                    <div
+                      key={member.id}
+                      className="flex items-center justify-between hover:bg-muted/70 px-2 rounded-md"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={member.imageUrl} />
+                          <AvatarFallback>
+                            {member.name?.charAt(0) ?? "?"}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="text-sm">{member.name}</span>
+                      </div>
+                      <span className="font-medium text-green-600">
+                        ₹
+                        {member.amount.toLocaleString("en-IN", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }) || "0.00"}
+                      </span>
                     </div>
-                    <span className="font-medium text-green-600">
-                      ₹
-                      {member.amount.toLocaleString("en-IN", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      }) || "0.00"}
-                    </span>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -135,27 +138,29 @@ const GroupBalances = ({ balances }) => {
               </h3>
               <div className="space-y-3">
                 {owingToMembers.map((member) => (
-                  <div
-                    key={member.id}
-                    className="flex items-center justify-between"
-                  >
-                    <div className="flex items-center gap-2">
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={member.imageUrl} />
-                        <AvatarFallback>
-                          {member.name?.charAt(0) ?? "?"}
-                        </AvatarFallback>
-                      </Avatar>
-                      <span className="text-sm">{member.name}</span>
+                  <Link href={`/person/${member.id}`} key={member.id}>
+                    <div
+                      key={member.id}
+                      className="flex items-center justify-between hover:bg-muted/70 px-2 rounded-md"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={member.imageUrl} />
+                          <AvatarFallback>
+                            {member.name?.charAt(0) ?? "?"}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="text-sm">{member.name}</span>
+                      </div>
+                      <span className="font-medium text-red-600">
+                        ₹
+                        {member.amount.toLocaleString("en-IN", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }) || "0.00"}
+                      </span>
                     </div>
-                    <span className="font-medium text-red-600">
-                      ₹
-                      {member.amount.toLocaleString("en-IN", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      }) || "0.00"}
-                    </span>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </div>
