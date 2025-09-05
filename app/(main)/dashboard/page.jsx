@@ -187,7 +187,11 @@ const Dashboard = () => {
                   <GroupList groups={groups} />
                 </CardContent>
                 <CardFooter>
-                  <Button variant="outline" asChild className="w-full">
+                  <Button
+                    variant="outline"
+                    asChild
+                    className="w-full hover:-translate-y-1"
+                  >
                     <Link href="/contacts?createGroup=true">
                       <Users className="mr-2 h-4 w-4" />
                       Create new group
