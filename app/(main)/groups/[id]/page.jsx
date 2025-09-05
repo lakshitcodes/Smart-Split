@@ -86,20 +86,28 @@ const GroupPage = () => {
         <div className="lg:col-span-2">
           <Card>
             <CardHeader>
-              <CardTitle className="text-xl">Group Balances</CardTitle>
+              <CardTitle className="text-xl text-muted-foreground">
+                Group Balances
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <GroupBalances balances={balance} />
+              <div className="max-h-80 overflow-y-scroll">
+                <GroupBalances balances={balance} />
+              </div>
             </CardContent>
           </Card>
         </div>
         <div>
           <Card>
             <CardHeader>
-              <CardTitle className="text-xl">Members</CardTitle>
+              <CardTitle className="text-xl text-muted-foreground">
+                Members
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <GroupMembers members={members} />
+              <div className="max-h-80 overflow-y-scroll">
+                <GroupMembers members={members} />
+              </div>
             </CardContent>
           </Card>
         </div>

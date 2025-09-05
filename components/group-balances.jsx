@@ -2,7 +2,7 @@
 
 import { api } from "@/convex/_generated/api";
 import { useConvexQuery } from "@/hooks/use-convex-query";
-import { ArrowDownCircle, ArrowUpCircle } from "lucide-react";
+import { ArrowDownCircle, ArrowUpCircle, CheckCircle } from "lucide-react";
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
@@ -51,16 +51,16 @@ const GroupBalances = ({ balances }) => {
     owedByMembers.length === 0 &&
     owingToMembers.length === 0;
   return (
-    <div className="space-y-4">
-      <div className="text-center pb-4 border-b">
+    <div className="space-y-4 ">
+      <div className="text-center pb-12 border-b max-h-30">
         <p className="text-sm text-muted-foreground mb-1">Your balance</p>
         <p
-          className={`text-2xl font-bold ${
+          className={`text-3xl font-extrabold ${
             me.totalBalance > 0
-              ? "text-green-600"
+              ? "text-green-600 drop-shadow-sm"
               : me.totalBalance < 0
-                ? "text-red-600"
-                : ""
+                ? "text-red-600 drop-shadow-sm"
+                : "text-muted-foreground"
           }`}
         >
           {me.totalBalance > 0
@@ -85,88 +85,95 @@ const GroupBalances = ({ balances }) => {
               : "You are all settled up"}
         </p>
       </div>
+      <div className="max-h-50 overflow-y-scroll">
+        {isAllSettledUp ? (
+          <div className="text-center py-8 text-muted-foreground">
+            <CheckCircle className="h-8 w-8 mx-auto mb-2 text-green-500" />
+            Everyone is settled up!
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {/* People who owe the current user */}
+            {owedByMembers.length > 0 && (
+              <div>
+                <h3 className="text-xs uppercase tracking-wide text-muted-foreground flex items-center mb-2">
+                  <span className="flex items-center justify-center h-6 w-6 rounded-full bg-green-100 mr-2">
+                    <ArrowUpCircle className="h-4 w-4 text-green-600" />
+                  </span>
+                  Owed to you
+                </h3>
 
-      {isAllSettledUp ? (
-        <div className="text-center py-4">
-          <p className="text-muted-foreground">Everyone is settled up!</p>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {/* People who owe the current user */}
-          {owedByMembers.length > 0 && (
-            <div>
-              <h3 className="text-sm font-medium flex items-center mb-3">
-                <ArrowUpCircle className="h-4 w-4 text-green-500 mr-2" />
-                Owed to you
-              </h3>
-              <div className="space-y-3">
-                {owedByMembers.map((member) => (
-                  <Link href={`/person/${member.id}`} key={member.id}>
-                    <div
-                      key={member.id}
-                      className="flex items-center justify-between hover:bg-muted/70 px-2 rounded-md"
-                    >
-                      <div className="flex items-center gap-2">
-                        <Avatar className="h-8 w-8">
-                          <AvatarImage src={member.imageUrl} />
-                          <AvatarFallback>
-                            {member.name?.charAt(0) ?? "?"}
-                          </AvatarFallback>
-                        </Avatar>
-                        <span className="text-sm">{member.name}</span>
+                <div className="space-y-3">
+                  {owedByMembers.map((member) => (
+                    <Link href={`/person/${member.id}`} key={member.id}>
+                      <div
+                        key={member.id}
+                        className="flex items-center justify-between hover:bg-muted/70 px-2 rounded-md transition"
+                      >
+                        <div className="flex items-center gap-2">
+                          <Avatar className="h-8 w-8">
+                            <AvatarImage src={member.imageUrl} />
+                            <AvatarFallback>
+                              {member.name?.charAt(0) ?? "?"}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className="text-sm">{member.name}</span>
+                        </div>
+                        <span className="font-medium text-green-600">
+                          ₹
+                          {member.amount.toLocaleString("en-IN", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          }) || "0.00"}
+                        </span>
                       </div>
-                      <span className="font-medium text-green-600">
-                        ₹
-                        {member.amount.toLocaleString("en-IN", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        }) || "0.00"}
-                      </span>
-                    </div>
-                  </Link>
-                ))}
+                    </Link>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* People the current user owes */}
-          {owingToMembers.length > 0 && (
-            <div>
-              <h3 className="text-sm font-medium flex items-center mb-3">
-                <ArrowDownCircle className="h-4 w-4 text-red-500 mr-2" />
-                You owe
-              </h3>
-              <div className="space-y-3">
-                {owingToMembers.map((member) => (
-                  <Link href={`/person/${member.id}`} key={member.id}>
-                    <div
-                      key={member.id}
-                      className="flex items-center justify-between hover:bg-muted/70 px-2 rounded-md"
-                    >
-                      <div className="flex items-center gap-2">
-                        <Avatar className="h-8 w-8">
-                          <AvatarImage src={member.imageUrl} />
-                          <AvatarFallback>
-                            {member.name?.charAt(0) ?? "?"}
-                          </AvatarFallback>
-                        </Avatar>
-                        <span className="text-sm">{member.name}</span>
+            {/* People the current user owes */}
+            {owingToMembers.length > 0 && (
+              <div>
+                <h3 className="text-xs uppercase tracking-wide text-muted-foreground flex items-center mb-2">
+                  <span className="flex items-center justify-center h-6 w-6 rounded-full bg-red-100 mr-2">
+                    <ArrowDownCircle className="h-4 w-4 text-red-500" />
+                  </span>
+                  You owe
+                </h3>
+                <div className="space-y-3">
+                  {owingToMembers.map((member) => (
+                    <Link href={`/person/${member.id}`} key={member.id}>
+                      <div
+                        key={member.id}
+                        className="flex items-center justify-between hover:bg-muted/70 px-2 rounded-md transition"
+                      >
+                        <div className="flex items-center gap-2">
+                          <Avatar className="h-8 w-8">
+                            <AvatarImage src={member.imageUrl} />
+                            <AvatarFallback>
+                              {member.name?.charAt(0) ?? "?"}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className="text-sm">{member.name}</span>
+                        </div>
+                        <span className="font-medium text-red-600">
+                          ₹
+                          {member.amount.toLocaleString("en-IN", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          }) || "0.00"}
+                        </span>
                       </div>
-                      <span className="font-medium text-red-600">
-                        ₹
-                        {member.amount.toLocaleString("en-IN", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        }) || "0.00"}
-                      </span>
-                    </div>
-                  </Link>
-                ))}
+                    </Link>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
-        </div>
-      )}
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

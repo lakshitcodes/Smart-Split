@@ -52,7 +52,7 @@ const GroupMembers = ({ members }) => {
           <Link
             href={`/person/${member.id}`}
             key={member.id}
-            className="hover:bg-muted transition-colors cursor-pointer rounded-md block"
+            className="hover:bg-muted/90 transition-colors cursor-pointer rounded-md block"
           >
             {content}
           </Link>
