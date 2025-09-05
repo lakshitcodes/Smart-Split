@@ -116,7 +116,8 @@ export const getGroupExpenses = query({
         const totals = Object.fromEntries(ids.map((id) => [id, 0]));
         // pair‑wise ledger  debtor -> creditor -> amount
         // // Create a 2D ledger to track who owes whom
-        // ledger[A][B] = how much A owes B        const ledger = {};
+        // ledger[A][B] = how much A owes B        
+        const ledger = {};
         ids.forEach((a) => {
             ledger[a] = {};
             ids.forEach((b) => {
