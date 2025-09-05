@@ -129,10 +129,18 @@ const PersonPage = () => {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="expenses" className="space-y-4">
-          <ExpenseList expenses={expenses} showOtherPerson={false} />
+          <ExpenseList
+            expenses={expenses}
+            showOtherPerson={false}
+            otherPersonId={params.id}
+            userLookupMap={{ [otherUser.id]: otherUser }}
+          />
         </TabsContent>
         <TabsContent value="settlements" className="space-y-4">
-          <SettlementsList />
+          <SettlementsList
+            settlements={settlements}
+            userLookupMap={{ [otherUser.id]: otherUser }}
+          />
         </TabsContent>
       </Tabs>
     </div>

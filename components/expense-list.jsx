@@ -33,9 +33,10 @@ const ExpenseList = ({
   const getUserDetails = (userId) => {
     return {
       name:
-        userId === currentUser?.id
+        userId === currentUser?._id
           ? "You"
           : userLookupMap[userId]?.name || "Other User",
+      imageUrl: null,
       id: userId,
     };
   };
@@ -58,7 +59,7 @@ const ExpenseList = ({
     }
 
     try {
-      await deleteExpense({ expenseId: expense._id });
+      await deleteExpense.mutate({ expenseId: expense._id });
       toast.success("Expense deleted successfully.");
     } catch (error) {
       toast.error("Failed to delete expense : " + error.message);
@@ -104,7 +105,7 @@ const ExpenseList = ({
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 md:mt-7">
                   <div className="text-right">
                     {" "}
                     <div className="font-medium">
@@ -145,32 +146,42 @@ const ExpenseList = ({
                 </div>
               </div>
 
-              <div className="mt-3 text-sm flex gap-2 flex-wrap">
-                {expense.splits.map((split, idx) => {
-                  const splitUser = getUserDetails(split.userId, expense);
+              <div className="mt-3 text-sm">
+                <div className="flex gap-2 flex-wrap">
+                  {expense.splits.map((split, idx) => {
+                    const splitUser = getUserDetails(split.userId, expense);
 
-                  const isCurrentUser = split.userId === currentUser?._id;
-                  return (
-                    <Badge
-                      key={idx}
-                      variant={split.paid ? "outline" : "secondary"}
-                      className="flex items-center gap-1"
-                    >
-                      <Avatar className="h-4 w-4 ">
-                        <AvatarFallback>
-                          {splitUser.name?.charAt(0) || "?"}
-                        </AvatarFallback>
-                      </Avatar>
-                      <span>
-                        {isCurrentUser ? "You" : splitUser.name}: ₹
-                        {split.amount.toLocaleString("en-IN", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        }) || "0.00"}
-                      </span>
-                    </Badge>
-                  );
-                })}
+                    const isCurrentUser = split.userId === currentUser?._id;
+                    const shouldShow =
+                      showOtherPerson ||
+                      (!showOtherPerson &&
+                        (split.userId === currentUser?._id ||
+                          split.userId === otherPersonId));
+
+                    if (!shouldShow) return null;
+                    return (
+                      <Badge
+                        key={idx}
+                        variant={split.paid ? "outline" : "secondary"}
+                        className="flex items-center gap-1"
+                      >
+                        <Avatar className="h-4 w-4 ">
+                          <AvatarImage src={splitUser.imageUrl} />
+                          <AvatarFallback>
+                            {splitUser.name?.charAt(0) || "?"}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span>
+                          {isCurrentUser ? "You" : splitUser.name}: ₹
+                          {split.amount.toLocaleString("en-IN", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          }) || "0.00"}
+                        </span>
+                      </Badge>
+                    );
+                  })}
+                </div>
               </div>
             </CardContent>
           </Card>
