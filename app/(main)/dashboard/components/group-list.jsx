@@ -42,7 +42,8 @@ const GroupList = ({ groups }) => {
               <span
                 className={`text-sm font-medium ${balance > 0 ? "text-green-600" : "text-red-500"}`}
               >
-                {balance > 0 ? "+" : ""}₹{formatCurrency(balance)}
+                {balance > 0 ? "+" : ""}
+                {formatCurrency(balance)}
               </span>
             )}
           </Link>
