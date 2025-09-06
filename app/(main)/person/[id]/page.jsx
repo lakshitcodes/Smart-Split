@@ -105,11 +105,7 @@ const PersonPage = () => {
             <div
               className={`text-2xl font-bold ${balance > 0 ? "text-green-600" : balance < 0 ? "text-red-600" : ""}`}
             >
-              ₹
-              {Math.abs(balance).toLocaleString("en-IN", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              }) || "0.00"}
+              {formatCurrency(Math.abs(balance))}
             </div>
           </div>
         </CardContent>

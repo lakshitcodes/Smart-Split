@@ -1,6 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatCurrency } from "@/lib/formatCurrency";
 import {
   BarChart,
   Bar,
@@ -51,21 +52,13 @@ export default function ExpenseSummary({ monthlySpending, totalSpent }) {
           <div className="bg-muted rounded-lg p-4">
             <p className="text-sm text-muted-foreground">Total this month</p>
             <h3 className="text-2xl font-bold mt-1">
-              ₹
-              {monthlySpending?.[currentMonth]?.total.toLocaleString("en-IN", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              }) || "0.00"}
+              {formatCurrency(monthlySpending?.[currentMonth]?.total)}
             </h3>
           </div>
           <div className="bg-muted rounded-lg p-4">
             <p className="text-sm text-muted-foreground">Total this year</p>
             <h3 className="text-2xl font-bold mt-1">
-              ₹
-              {totalSpent?.toLocaleString("en-IN", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              }) || "0.00"}
+              {formatCurrency(totalSpent || 0)}
             </h3>
           </div>
         </div>
@@ -77,10 +70,7 @@ export default function ExpenseSummary({ monthlySpending, totalSpent }) {
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip
-                formatter={(value) => [`₹ ${value.toLocaleString("en-IN", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}`, "Amount"]}
+                formatter={(value) => [`${formatCurrency(value)}`, "Amount"]}
                 labelFormatter={() => "Spending"}
               />
               <Bar dataKey="amount" fill="#36d7b7" radius={[4, 4, 0, 0]} />

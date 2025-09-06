@@ -1,4 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { formatCurrency } from "@/lib/formatCurrency";
+import { format } from "date-fns";
 import { ArrowDownCircle, ArrowUpCircle } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -40,11 +42,7 @@ const BalanceSummary = ({ balances }) => {
                   <span className="text-sm">{item.name}</span>
                 </div>
                 <span className="font-medium text-green-600">
-                  ₹
-                  {item.amount.toLocaleString("en-IN", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
+                  {formatCurrency(item.amount)}
                 </span>
               </Link>
             ))}
@@ -75,11 +73,7 @@ const BalanceSummary = ({ balances }) => {
                   <span className="text-sm">{item.name}</span>
                 </div>
                 <span className="font-medium text-red-500">
-                  ₹
-                  {item.amount.toLocaleString("en-IN", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
+                  {formatCurrency(item.amount)}
                 </span>
               </Link>
             ))}

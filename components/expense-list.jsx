@@ -9,6 +9,7 @@ import { Trash2 } from "lucide-react";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { formatCurrency } from "@/lib/formatCurrency";
 
 const ExpenseList = ({
   expenses,
@@ -109,11 +110,7 @@ const ExpenseList = ({
                   <div className="text-right">
                     {" "}
                     <div className="font-medium">
-                      ₹
-                      {expense.amount.toLocaleString("en-IN", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
+                      {formatCurrency(expense.amount)}
                     </div>
                     {isGroupExpense ? (
                       <Badge variant="outline" className="mt-1 rounded-full">
@@ -177,11 +174,8 @@ const ExpenseList = ({
                           </AvatarFallback>
                         </Avatar>
                         <span>
-                          {isCurrentUser ? "You" : splitUser.name}: ₹
-                          {split.amount.toLocaleString("en-IN", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}
+                          {isCurrentUser ? "You" : splitUser.name}:{" "}
+                          {formatCurrency(split.amount)}
                         </span>
                       </Badge>
                     );

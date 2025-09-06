@@ -1,3 +1,4 @@
+import { formatCurrency } from "@/lib/formatCurrency";
 import { Users } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -41,11 +42,7 @@ const GroupList = ({ groups }) => {
               <span
                 className={`text-sm font-medium ${balance > 0 ? "text-green-600" : "text-red-500"}`}
               >
-                {balance > 0 ? "+" : ""}₹
-                {balance?.toLocaleString("en-IN", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
+                {balance > 0 ? "+" : ""}₹{formatCurrency(balance)}
               </span>
             )}
           </Link>

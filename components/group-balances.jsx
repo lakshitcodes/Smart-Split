@@ -6,6 +6,7 @@ import { ArrowDownCircle, ArrowUpCircle, CheckCircle } from "lucide-react";
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
+import { formatCurrency } from "@/lib/formatCurrency";
 
 const GroupBalances = ({ balances }) => {
   const { data: currentUser } = useConvexQuery(api.users.getCurrentUser);
@@ -64,17 +65,9 @@ const GroupBalances = ({ balances }) => {
           }`}
         >
           {me.totalBalance > 0
-            ? `+₹
-                      ${me.totalBalance.toLocaleString("en-IN", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}`
+            ? `+${formatCurrency(me.totalBalance)}`
             : me.totalBalance < 0
-              ? `-₹
-                      ${me.totalBalance.toLocaleString("en-IN", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}`
+              ? `-${formatCurrency(me.totalBalance)}`
               : "₹ 0.00"}
         </p>
         <p className="text-sm text-muted-foreground mt-1">
@@ -120,11 +113,7 @@ const GroupBalances = ({ balances }) => {
                           <span className="text-sm">{member.name}</span>
                         </div>
                         <span className="font-medium text-green-600">
-                          ₹
-                          {member.amount.toLocaleString("en-IN", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          }) || "0.00"}
+                          {formatCurrency(member.amount)}
                         </span>
                       </div>
                     </Link>
@@ -159,11 +148,7 @@ const GroupBalances = ({ balances }) => {
                           <span className="text-sm">{member.name}</span>
                         </div>
                         <span className="font-medium text-red-600">
-                          ₹
-                          {member.amount.toLocaleString("en-IN", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          }) || "0.00"}
+                          {formatCurrency(member.amount)}
                         </span>
                       </div>
                     </Link>
