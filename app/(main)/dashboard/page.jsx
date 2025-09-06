@@ -72,7 +72,7 @@ const Dashboard = () => {
                     </span>
                   ) : balances?.totalBalance < 0 ? (
                     <span className="text-red-500">
-                      -{Math.abs(formatCurrency(balances.totalBalance))}
+                      -{formatCurrency(Math.abs(balances.totalBalance))}
                     </span>
                   ) : (
                     <span>₹0.00</span>
