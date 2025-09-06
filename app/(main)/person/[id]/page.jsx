@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api } from "@/convex/_generated/api";
 import { useConvexQuery } from "@/hooks/use-convex-query";
+import { formatCurrency } from "@/lib/formatCurrency";
 import { Avatar } from "@radix-ui/react-avatar";
 import { ArrowLeft, ArrowLeftRight, PlusCircle } from "lucide-react";
 import Link from "next/link";
