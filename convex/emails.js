@@ -3,6 +3,7 @@
 import { v } from "convex/values";
 import { action } from "./_generated/server";
 import nodemailer from "nodemailer";
+require('dotenv').config();
 
 // Action to send email using Nodemailer
 export const sendEmail = action({
@@ -16,16 +17,16 @@ export const sendEmail = action({
         try {
             // Create transporter
             const transporter = nodemailer.createTransport({
-                service: "gmail", // change if not using Gmail
+                service: "gmail",
                 auth: {
-                    user: "smartsplit.dev@gmail.com",
-                    pass: "xzqz rfum yoch gufg",
+                    user: process.env.MAIL_USER,
+                    pass: process.env.MAIL_PASSWORD,
                 },
             });
 
             // Send mail
             const info = await transporter.sendMail({
-                from: `"SmartSplit" <smartsplit.dev@gmail.com>`,
+                from: `"SmartSplit" <${process.env.MAIL_USER}>`,
                 to: args.to,
                 subject: args.subject,
                 html: args.html,
