@@ -9,6 +9,7 @@ import { Trash2 } from "lucide-react";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { formatCurrency } from "@/lib/formatCurrency";
 
 const ExpenseList = ({
   expenses,
@@ -76,19 +77,18 @@ const ExpenseList = ({
 
         return (
           <Card
-            className="hover:bg-muted/30 transition-colors"
+            className="hover:shadow-md hover:-translate-y-1 transition-transform duration-200 rounded-xl"
             key={expense._id}
           >
             <CardContent className="py-4">
               <div className="flex items-center justify-between">
+                {/* Left Side: Icon + Info */}
                 <div className="flex items-center gap-3">
-                  {/* Category icon */}
-                  <div className="bg-primary/10 p-2 rounded-full">
-                    <CategoryIcon className="h-5 w-5 text-primary" />
+                  <div className="bg-primary/10 p-2 rounded-xl">
+                    <CategoryIcon className="h-6 w-6 text-primary" />
                   </div>
                   <div>
                     <h3 className="font-medium">{expense.description}</h3>
-
                     <div className="flex items-center text-sm text-muted-foreground gap-2">
                       <span>
                         {format(new Date(expense.date), "MMM dd, yyyy")}
@@ -105,18 +105,15 @@ const ExpenseList = ({
                   </div>
                 </div>
 
+                {/* Right Side: Amount + Actions */}
                 <div className="flex items-center gap-2 md:mt-7">
                   <div className="text-right">
                     {" "}
                     <div className="font-medium">
-                      ₹
-                      {expense.amount.toLocaleString("en-IN", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      }) || "0.00"}
+                      {formatCurrency(expense.amount)}
                     </div>
                     {isGroupExpense ? (
-                      <Badge variant="outline" className="mt-1">
+                      <Badge variant="outline" className="mt-1 rounded-full">
                         Group Expense
                       </Badge>
                     ) : (
@@ -136,7 +133,7 @@ const ExpenseList = ({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 rounded-full text-red-500 hover:text-red-700 hover:bg-red-100"
+                      className="h-8 w-8 rounded-full text-red-500 hover:text-red-600 hover:bg-red-100"
                       onClick={() => handleDeleteExpense(expense)}
                     >
                       <Trash2 className="h-4 w-4" />
@@ -146,6 +143,7 @@ const ExpenseList = ({
                 </div>
               </div>
 
+              {/* Splits */}
               <div className="mt-3 text-sm">
                 <div className="flex gap-2 flex-wrap">
                   {expense.splits.map((split, idx) => {
@@ -159,24 +157,25 @@ const ExpenseList = ({
                           split.userId === otherPersonId));
 
                     if (!shouldShow) return null;
+
                     return (
                       <Badge
                         key={idx}
-                        variant={split.paid ? "outline" : "secondary"}
-                        className="flex items-center gap-1"
+                        className={`flex items-center gap-1 rounded-full px-3 py-1 ${
+                          split.paid
+                            ? "border border-muted text-muted-foreground bg-background"
+                            : "bg-red-50 text-red-600"
+                        }`}
                       >
-                        <Avatar className="h-4 w-4 ">
+                        <Avatar className="h-4 w-4">
                           <AvatarImage src={splitUser.imageUrl} />
                           <AvatarFallback>
                             {splitUser.name?.charAt(0) || "?"}
                           </AvatarFallback>
                         </Avatar>
                         <span>
-                          {isCurrentUser ? "You" : splitUser.name}: ₹
-                          {split.amount.toLocaleString("en-IN", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          }) || "0.00"}
+                          {isCurrentUser ? "You" : splitUser.name}:{" "}
+                          {formatCurrency(split.amount)}
                         </span>
                       </Badge>
                     );

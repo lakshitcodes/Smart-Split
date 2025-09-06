@@ -5,6 +5,7 @@ import { Card, CardContent } from "./ui/card";
 import { ArrowLeftRight } from "lucide-react";
 import { format } from "date-fns";
 import { Badge } from "./ui/badge";
+import { formatCurrency } from "@/lib/formatCurrency";
 
 const SettlementsList = ({
   settlements,
@@ -45,7 +46,7 @@ const SettlementsList = ({
 
         return (
           <Card
-            className="hover:bg-muted/30 transition-colors"
+            className="hover:shadow-md hover:-translate-y-1 transition-transform duration-200 rounded-xl"
             key={settlement._id}
           >
             <CardContent className="py-4">
@@ -80,11 +81,7 @@ const SettlementsList = ({
 
                 <div className="text-right">
                   <div className="font-medium">
-                    ₹
-                    {settlement.amount.toLocaleString("en-IN", {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    }) || "0.00"}
+                    {formatCurrency(settlement.amount)}
                   </div>
                   {isGroupSettlement ? (
                     <Badge variant="outline" className="mt-1">

@@ -17,6 +17,7 @@ import React from "react";
 import ExpenseSummary from "./components/expense-summary";
 import BalanceSummary from "./components/balance-summary";
 import GroupList from "./components/group-list";
+import { formatCurrency } from "@/lib/formatCurrency";
 
 const Dashboard = () => {
   const { data: balances, isLoading: balancesLoading } = useConvexQuery(
@@ -67,19 +68,11 @@ const Dashboard = () => {
                 <div className="text-2xl font-bold">
                   {balances?.totalBalance > 0 ? (
                     <span className="text-green-600">
-                      +₹
-                      {balances.totalBalance.toLocaleString("en-IN", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
+                      +{formatCurrency(balances.totalBalance)}
                     </span>
                   ) : balances?.totalBalance < 0 ? (
                     <span className="text-red-500">
-                      -₹
-                      {Math.abs(balances.totalBalance).toLocaleString("en-IN", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
+                      -{formatCurrency(Math.abs(balances.totalBalance))}
                     </span>
                   ) : (
                     <span>₹0.00</span>
@@ -103,11 +96,7 @@ const Dashboard = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-green-600">
-                  ₹
-                  {balances?.youAreOwed.toLocaleString("en-IN", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
+                  {formatCurrency(balances?.youAreOwed || 0)}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
                   From {balances?.oweDetails?.youAreOwedBy?.length || 0} people
@@ -125,11 +114,7 @@ const Dashboard = () => {
                 {balances?.oweDetails?.youOwe?.length > 0 ? (
                   <>
                     <div className="text-2xl font-bold text-red-500">
-                      ₹
-                      {balances?.youOwe.toLocaleString("en-IN", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
+                      {formatCurrency(balances?.youOwe || 0)}
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">
                       To {balances?.oweDetails?.youOwe?.length || 0} people
@@ -187,7 +172,11 @@ const Dashboard = () => {
                   <GroupList groups={groups} />
                 </CardContent>
                 <CardFooter>
-                  <Button variant="outline" asChild className="w-full">
+                  <Button
+                    variant="outline"
+                    asChild
+                    className="w-full hover:-translate-y-1"
+                  >
                     <Link href="/contacts?createGroup=true">
                       <Users className="mr-2 h-4 w-4" />
                       Create new group
