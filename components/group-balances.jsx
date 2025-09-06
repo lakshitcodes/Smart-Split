@@ -99,10 +99,7 @@ const GroupBalances = ({ balances }) => {
                 <div className="space-y-3">
                   {owedByMembers.map((member) => (
                     <Link href={`/person/${member.id}`} key={member.id}>
-                      <div
-                        key={member.id}
-                        className="flex items-center justify-between hover:bg-muted/70 px-2 rounded-md transition"
-                      >
+                      <div className="flex items-center justify-between hover:bg-muted/70 px-2 rounded-md transition">
                         <div className="flex items-center gap-2">
                           <Avatar className="h-8 w-8">
                             <AvatarImage src={member.imageUrl} />
@@ -134,10 +131,7 @@ const GroupBalances = ({ balances }) => {
                 <div className="space-y-3">
                   {owingToMembers.map((member) => (
                     <Link href={`/person/${member.id}`} key={member.id}>
-                      <div
-                        key={member.id}
-                        className="flex items-center justify-between hover:bg-muted/70 px-2 rounded-md transition"
-                      >
+                      <div className="flex items-center justify-between hover:bg-muted/70 px-2 rounded-md transition">
                         <div className="flex items-center gap-2">
                           <Avatar className="h-8 w-8">
                             <AvatarImage src={member.imageUrl} />
