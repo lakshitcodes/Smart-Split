@@ -89,14 +89,19 @@ const ExpenseList = ({
                   </div>
                   <div>
                     <h3 className="font-medium">{expense.description}</h3>
-                    <div className="flex items-center text-sm text-muted-foreground gap-2">
-                      <span>
+                    <div className="flex flex-col sm:flex-row sm:items-center text-sm text-muted-foreground gap-1 sm:gap-2">
+                      {/* Date */}
+                      <span className="before:content-['•'] before:mr-1 sm:before:content-none">
                         {format(new Date(expense.date), "MMM dd, yyyy")}
                       </span>
+
                       {showOtherPerson && (
                         <>
-                          <span>•</span>
-                          <span>
+                          {/* Separator only on larger screens */}
+                          <span className="hidden sm:inline">•</span>
+
+                          {/* Payer info */}
+                          <span className="before:content-['•'] before:mr-1 sm:before:content-none">
                             {isCurrentUserPayer ? "You" : payer.name} paid
                           </span>
                         </>

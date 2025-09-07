@@ -65,14 +65,22 @@ const SettlementsList = ({
                           ? `${payer.name} paid you`
                           : `${payer.name} paid ${receiver.name}`}
                     </h3>
-                    <div className="flex items-center text-sm text-muted-foreground gap-2">
-                      <span>
+
+                    <div className="flex flex-col sm:flex-row sm:items-center text-sm text-muted-foreground gap-1 sm:gap-2">
+                      {/* Date */}
+                      <span className="before:content-['•'] before:mr-1 sm:before:content-none">
                         {format(new Date(settlement.date), "MMM dd, yyyy")}
                       </span>
+
                       {settlement.note && (
                         <>
-                          <span>•</span>
-                          <span>{settlement.note}</span>
+                          {/* Separator only for larger screens */}
+                          <span className="hidden sm:inline">•</span>
+
+                          {/* Note */}
+                          <span className="before:content-['•'] before:mr-1 sm:before:content-none">
+                            {settlement.note}
+                          </span>
                         </>
                       )}
                     </div>

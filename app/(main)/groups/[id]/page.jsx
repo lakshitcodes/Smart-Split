@@ -65,14 +65,14 @@ const GroupPage = () => {
             </div>
           </div>
 
-          <div className="flex gap-2">
-            <Button asChild variant="outline">
+          <div className="flex gap-2 w-full sm:w-auto">
+            <Button asChild variant="outline" className="flex-1 sm:flex-none">
               <Link href={`/settlements/group/${params.id}`}>
                 <ArrowLeftRight className="mr-2 h-4 w-4" />
                 Settle up
               </Link>
             </Button>
-            <Button asChild>
+            <Button asChild className="flex-1 sm:flex-none">
               <Link href={`/expenses/new`}>
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Add expense
