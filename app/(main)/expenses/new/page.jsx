@@ -27,13 +27,13 @@ const NewExpensePage = () => {
             <TabsContent value="individual" className="mt-0">
               <ExpenseForm
                 type="individual"
-                onSuccess={(id) => router.push(`person/${id}`)}
+                onSuccess={(id) => router.push(`/person/${id}`)}
               />
             </TabsContent>
             <TabsContent value="group" className="mt-0">
               <ExpenseForm
                 type="group"
-                onSuccess={(id) => router.push(`group/${id}`)}
+                onSuccess={(id) => router.push(`/group/${id}`)}
               />
             </TabsContent>
           </Tabs>

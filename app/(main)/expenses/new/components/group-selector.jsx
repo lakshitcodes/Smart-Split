@@ -1,32 +1,33 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { useConvexQuery } from "@/hooks/use-convex-query";
+import { api } from "@/convex/_generated/api";
+import { BarLoader } from "react-spinners";
+import { Users } from "lucide-react";
 import {
+  Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { api } from "@/convex/_generated/api";
-import { useConvexQuery } from "@/hooks/use-convex-query";
-import { Select } from "@radix-ui/react-select";
-import { Users } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { BarLoader } from "react-spinners";
 
 const GroupSelector = ({ onChange }) => {
   const [selectedGroupId, setSelectedGroupId] = useState("");
 
+  // Single query to get all data we need
   const { data, isLoading } = useConvexQuery(
     api.groups.getGroupOrMembers,
     selectedGroupId ? { groupId: selectedGroupId } : {}
   );
 
-  //   When group data changes , notify parent
+  // When group data changes, notify parent
   useEffect(() => {
     if (data?.selectedGroup && onChange) {
       onChange(data.selectedGroup);
     }
-  }, [data]);
+  }, [data, onChange]);
 
   const handleGroupChange = (groupId) => {
     setSelectedGroupId(groupId);
@@ -37,9 +38,11 @@ const GroupSelector = ({ onChange }) => {
   }
 
   if (!data?.groups || data.groups.length === 0) {
-    <div className="text-sm text-amber-600 p-2 bg-amber-50 rounded-md">
-      You are not part of any groups. Please create or join a group first.
-    </div>;
+    return (
+      <div className="text-sm text-amber-600 p-2 bg-amber-50 rounded-md">
+        You need to create a group first before adding a group expense.
+      </div>
+    );
   }
 
   return (
@@ -64,6 +67,7 @@ const GroupSelector = ({ onChange }) => {
           ))}
         </SelectContent>
       </Select>
+
       {isLoading && selectedGroupId && (
         <div className="mt-2">
           <BarLoader width={"100%"} color="#36d7b7" />

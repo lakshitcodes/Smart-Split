@@ -209,7 +209,7 @@ export default function SplitSelector({
                       parseFloat(e.target.value) || 0
                     )
                   }
-                  className="w-16 h-8"
+                  className="w-18 h-8"
                 />
                 <span className="text-sm text-muted-foreground">%</span>
                 <span className="text-sm ml-1">
@@ -223,7 +223,7 @@ export default function SplitSelector({
             <div className="flex items-center gap-2 flex-1">
               <div className="flex-1"></div>
               <div className="flex gap-1 items-center">
-                <span className="text-sm text-muted-foreground">$</span>
+                <span className="text-sm text-muted-foreground">₹</span>
                 <Input
                   type="number"
                   min="0"
@@ -251,7 +251,7 @@ export default function SplitSelector({
           <span
             className={`font-medium ${!isAmountValid ? "text-amber-600" : ""}`}
           >
-            ${totalAmount.toFixed(2)}
+            {formatCurrency(totalAmount)}
           </span>
           {type !== "equal" && (
             <span
