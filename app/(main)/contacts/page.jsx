@@ -49,7 +49,7 @@ export default function ContactsPage() {
   return (
     <div className="container mx-auto py-6 max-w-5xl">
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between mb-8">
-        <h1 className="text-5xl gradient-title">Contacts</h1>
+        <h1 className="text-4xl gradient-title md:text-5xl">Contacts</h1>
         <Button
           className="shadow-md hover:shadow-lg transition-transform hover:-translate-y-0.5"
           onClick={() => setIsCreateGroupModalOpen(true)}

@@ -48,15 +48,16 @@ const Dashboard = () => {
         </div>
       ) : (
         <>
-          <div className="flex items-center justify-between">
-            <h1 className="text-5xl gradient-title">Dashboard</h1>
-            <Button asChild>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <h1 className="md:text-5xl text-4xl gradient-title">Dashboard</h1>
+            <Button asChild className="w-full sm:w-auto">
               <Link href="/expenses/new">
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Add Expense
               </Link>
             </Button>
           </div>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card>
               <CardHeader className="pb-2">
