@@ -40,7 +40,7 @@ const PersonPage = () => {
   const balance = data?.balance || 0;
 
   return (
-    <div className="container mx-auto py-6 max-w-4xl">
+    <div className="container mx-auto pt-0 pb-6 max-w-4xl">
       <div className="mb-6">
         <Button
           variant="outline"
@@ -66,14 +66,14 @@ const PersonPage = () => {
             </div>
           </div>
 
-          <div className="flex gap-2">
-            <Button asChild variant="outline">
+          <div className="flex gap-2 w-full sm:w-auto">
+            <Button asChild variant="outline" className="flex-1 sm:flex-none">
               <Link href={`/settlements/user/${params.id}`}>
                 <ArrowLeftRight className="mr-2 h-4 w-4" />
                 Settle up
               </Link>
             </Button>
-            <Button asChild>
+            <Button asChild className="flex-1 sm:flex-none">
               <Link href={`/expenses/new`}>
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Add expense

@@ -39,7 +39,7 @@ export default function ExpenseSummary({ monthlySpending, totalSpent }) {
       };
     }) || [];
 
-    // Get current year
+  // Get current year
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth();
 
@@ -83,30 +83,32 @@ export default function ExpenseSummary({ monthlySpending, totalSpent }) {
         </div>
 
         {/* Bar Chart */}
-        <div className="h-64 mt-6">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip
-                formatter={(value) => [`${formatCurrency(value)}`, "Amount"]}
-                labelFormatter={(label) => `Month: ${label}`}
-              />
-              <Bar
-                dataKey="amount"
-                fill="url(#barGradient)"
-                radius={[4, 4, 0, 0]}
-                isAnimationActive
-              />
-              <defs>
-                <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#36d7b7" stopOpacity={1} />
-                  <stop offset="100%" stopColor="#36d7b7" stopOpacity={0.3} />
-                </linearGradient>
-              </defs>
-            </BarChart>
-          </ResponsiveContainer>
+        <div className="h-64 mt-6 overflow-x-auto pr-15">
+          <div className="min-w-[600px] h-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip
+                  formatter={(value) => [`${formatCurrency(value)}`, "Amount"]}
+                  labelFormatter={(label) => `Month: ${label}`}
+                />
+                <Bar
+                  dataKey="amount"
+                  fill="url(#barGradient)"
+                  radius={[4, 4, 0, 0]}
+                  isAnimationActive
+                />
+                <defs>
+                  <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#36d7b7" stopOpacity={1} />
+                    <stop offset="100%" stopColor="#36d7b7" stopOpacity={0.3} />
+                  </linearGradient>
+                </defs>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
 
         {/* Footer */}

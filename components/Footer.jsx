@@ -3,14 +3,14 @@ import React from "react";
 const Footer = () => {
   return (
     <footer className="bottom-0 border-t bg-gray-50 py-10 flex justify-center text-center items-center">
-      <div className="w-full max-w-2xl">
-        <div className="rounded-xl border bg-white shadow-sm p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="w-full max-w-4/5">
+        <div className=" rounded-xl border bg-white shadow-sm p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <span className="text-muted-foreground text-sm">
             Made with <span className="text-red-500">❤️</span> by Lakshit Jain
           </span>
           <div className="flex gap-2 text-center justify-center items-center">
             <a
-              href="https://www.linkedin.com/in/lakshitjain/"
+              href="https://www.linkedin.com/in/jainlakshit/"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"

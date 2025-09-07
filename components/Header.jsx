@@ -16,14 +16,14 @@ const Header = () => {
   const path = usePathname();
   return (
     <header className="fixed top-0 w-full border-b bg-white/95 backdrop-blur z-50 supports-[backdrop-filter]:bg-white/60">
-      <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 ">
+      <nav className="container mx-auto px-4 h-12 sm:h-14 md:h-16 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2">
           <Image
             src={"/logos/logo.png"}
             alt="SmartSplit"
             width={200}
             height={60}
-            className="h-11 w-auto object-contain"
+            className="h-8 sm:h-10 md:h-11 w-auto max-w-[120px] sm:max-w-[150px] md:max-w-[200px] object-contain"
           />
         </Link>
         {path === "/" && (

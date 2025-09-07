@@ -216,7 +216,8 @@ export default function SplitSelector({
           )}
 
           {type === "percentage" && (
-            <div className="flex items-center gap-4 flex-1">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4 flex-1">
+              {/* Slider (hidden on small screens) */}
               <Slider
                 value={[split.percentage]}
                 min={0}
@@ -225,9 +226,11 @@ export default function SplitSelector({
                 onValueChange={(values) =>
                   updatePercentageSplit(split.userId, values[0])
                 }
-                className="flex-1"
+                className="flex-1 hidden sm:flex"
               />
-              <div className="flex gap-1 items-center min-w-[100px]">
+
+              {/* Percentage + amount (always visible, right aligned) */}
+              <div className="flex gap-1 items-center min-w-[100px] justify-end sm:justify-start mt-2 sm:mt-0">
                 <Input
                   type="number"
                   min="0"
@@ -239,7 +242,7 @@ export default function SplitSelector({
                       parseFloat(e.target.value) || 0
                     )
                   }
-                  className="w-18 h-8"
+                  className="w-18 h-8 text-right"
                 />
                 <span className="text-sm text-muted-foreground">%</span>
                 <span className="text-sm ml-1">

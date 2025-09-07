@@ -42,7 +42,7 @@ export default function SettlementPage() {
   };
 
   return (
-    <div className="container mx-auto py-6 max-w-lg">
+    <div className="container mx-auto pt-0 pb-6 max-w-lg">
       <Button
         variant="outline"
         size="sm"
@@ -54,7 +54,9 @@ export default function SettlementPage() {
       </Button>
 
       <div className="mb-6">
-        <h1 className="text-5xl gradient-title">Record a settlement</h1>
+        <h1 className="md:text-5xl text-4xl gradient-title">
+          Record a settlement
+        </h1>
         <p className="text-muted-foreground mt-1">
           {type === "user"
             ? `Settling up with ${data?.counterpart?.name}`
