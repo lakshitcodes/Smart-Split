@@ -33,36 +33,66 @@ export default function SplitSelector({
       newSplits = participants.map((participant) => ({
         userId: participant.id,
         name: participant.name,
+        amount: parseFloat(shareAmount.toFixed(2)), // round to 2 decimals
         email: participant.email,
         imageUrl: participant.imageUrl,
-        amount: shareAmount,
-        percentage: 100 / participants.length,
+        percentage: parseFloat((100 / participants.length).toFixed(2)),
         paid: participant.id === paidByUserId,
       }));
+
+      // Fix rounding difference: add to the payer
+      const totalAssigned = newSplits.reduce((sum, p) => sum + p.amount, 0);
+      const diff = parseFloat((amount - totalAssigned).toFixed(2));
+      if (diff !== 0) {
+        const payer = newSplits.find((p) => p.userId === paidByUserId);
+        if (payer) {
+          payer.amount = parseFloat((payer.amount + diff).toFixed(2));
+        }
+      }
     } else if (type === "percentage") {
       // Initialize percentage splits evenly
       const evenPercentage = 100 / participants.length;
       newSplits = participants.map((participant) => ({
         userId: participant.id,
         name: participant.name,
+        amount: parseFloat(((amount * evenPercentage) / 100).toFixed(2)),
         email: participant.email,
         imageUrl: participant.imageUrl,
-        amount: (amount * evenPercentage) / 100,
-        percentage: evenPercentage,
+        percentage: parseFloat(evenPercentage.toFixed(2)),
         paid: participant.id === paidByUserId,
       }));
+
+      // Fix rounding difference
+      const totalAssigned = newSplits.reduce((sum, p) => sum + p.amount, 0);
+      const diff = parseFloat((amount - totalAssigned).toFixed(2));
+      if (diff !== 0) {
+        const payer = newSplits.find((p) => p.userId === paidByUserId);
+        if (payer) {
+          payer.amount = parseFloat((payer.amount + diff).toFixed(2));
+        }
+      }
     } else if (type === "exact") {
       // Initialize exact splits evenly
       const evenAmount = amount / participants.length;
       newSplits = participants.map((participant) => ({
         userId: participant.id,
         name: participant.name,
+        amount: parseFloat(evenAmount.toFixed(2)),
         email: participant.email,
         imageUrl: participant.imageUrl,
-        amount: evenAmount,
-        percentage: (evenAmount / amount) * 100,
+        percentage: parseFloat(((evenAmount / amount) * 100).toFixed(2)),
         paid: participant.id === paidByUserId,
       }));
+
+      // Fix rounding difference
+      const totalAssigned = newSplits.reduce((sum, p) => sum + p.amount, 0);
+      const diff = parseFloat((amount - totalAssigned).toFixed(2));
+      if (diff !== 0) {
+        const payer = newSplits.find((p) => p.userId === paidByUserId);
+        if (payer) {
+          payer.amount = parseFloat((payer.amount + diff).toFixed(2));
+        }
+      }
     }
 
     setSplits(newSplits);
