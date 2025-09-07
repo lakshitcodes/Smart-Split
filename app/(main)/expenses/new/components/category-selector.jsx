@@ -36,7 +36,7 @@ const CategorySelector = ({ categories, onChange }) => {
       const defaultCategory =
         categories.find((cat) => cat.isDefault) || categories[0];
 
-      // Set the default category with triggering a re-render loop
+      // Set the default category without triggering a re-render loop
       setTimeout(() => {
         setSelectedCategory(defaultCategory.id);
         if (onChange) {
