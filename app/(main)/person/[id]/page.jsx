@@ -40,7 +40,7 @@ const PersonPage = () => {
   const balance = data?.balance || 0;
 
   return (
-    <div className="container mx-auto py-6 max-w-4xl">
+    <div className="container mx-auto pt-0 pb-6 max-w-4xl">
       <div className="mb-6">
         <Button
           variant="outline"

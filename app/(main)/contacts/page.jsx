@@ -47,7 +47,7 @@ export default function ContactsPage() {
   const { users, groups } = data || { users: [], groups: [] };
 
   return (
-    <div className="container mx-auto py-6 max-w-5xl">
+    <div className="container mx-auto pt-0 pb-6 max-w-5xl">
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between mb-8">
         <h1 className="text-4xl gradient-title md:text-5xl">Contacts</h1>
         <Button
@@ -68,7 +68,7 @@ export default function ContactsPage() {
           </h2>
           {users.length === 0 ? (
             <Card className="shadow-sm">
-              <CardContent className="py-6 text-center text-muted-foreground">
+              <CardContent className="pt-0 pb-6 text-center text-muted-foreground">
                 No contacts yet. Add an expense with someone to see them here.
               </CardContent>
             </Card>

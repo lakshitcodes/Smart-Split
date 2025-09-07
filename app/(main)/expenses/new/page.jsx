@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -9,28 +9,47 @@ import ExpenseForm from "./components/expense-form";
 const NewExpensePage = () => {
   const router = useRouter();
   return (
-    <div className="container max-w-3xl mx-auto py-6">
-      <div className="mb-6">
-        <h1 className="md:text-5xl text-4xl gradient-title">Add a new expense</h1>
-        <p className="text-muted-foreground mt-1">
-          Record a new expense to split with others.
+    <div className="container max-w-2xl mx-auto py-8">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-emerald-500 to-green-600 bg-clip-text text-transparent">
+          Add a New Expense
+        </h1>
+        <p className="text-muted-foreground mt-2 text-base">
+          Record a new expense and split it easily among participants.
         </p>
       </div>
 
-      <Card>
-        <CardContent>
-          <Tabs defaultValue="individual" className="pb-3">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="individual">Individual Expense</TabsTrigger>
-              <TabsTrigger value="group">Group Expense</TabsTrigger>
+      {/* Card */}
+      <Card className="rounded-2xl shadow-md">
+        <CardHeader className="pb-0">
+          <Tabs defaultValue="individual" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 rounded-xl bg-muted/40 p-1">
+              <TabsTrigger
+                value="individual"
+                className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm"
+              >
+                Individual
+              </TabsTrigger>
+              <TabsTrigger
+                value="group"
+                className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm"
+              >
+                Group
+              </TabsTrigger>
             </TabsList>
-            <TabsContent value="individual" className="mt-0">
+          </Tabs>
+        </CardHeader>
+
+        <CardContent className="pt-6">
+          <Tabs defaultValue="individual">
+            <TabsContent value="individual">
               <ExpenseForm
                 type="individual"
                 onSuccess={(id) => router.push(`/person/${id}`)}
               />
             </TabsContent>
-            <TabsContent value="group" className="mt-0">
+            <TabsContent value="group">
               <ExpenseForm
                 type="group"
                 onSuccess={(id) => router.push(`/group/${id}`)}

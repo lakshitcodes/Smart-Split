@@ -41,7 +41,7 @@ const Dashboard = () => {
     monthlySpendingLoading;
 
   return (
-    <div className="container mx-auto py-6 space-y-6">
+    <div className="container mx-auto pt-0 pb-6 space-y-6">
       {isLoading ? (
         <div>
           <PaymentLoading message="Fetching data" />
