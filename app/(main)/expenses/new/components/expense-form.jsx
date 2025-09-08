@@ -25,6 +25,8 @@ import { CalendarIcon } from "lucide-react";
 import { getAllCategories } from "@/lib/expense-categories";
 import CategorySelector from "./category-selector";
 import GroupSelector from "./group-selector";
+import { useAction } from "convex/react";
+import { generateExpenseEmail } from "@/lib/expense-email";
 
 // Form schema validation
 const expenseSchema = z.object({
@@ -78,6 +80,7 @@ export default function ExpenseForm({ type = "individual", onSuccess }) {
   // Watch for changes
   const amountValue = watch("amount");
   const paidByUserId = watch("paidByUserId");
+  const sendMail = useAction(api.emails.sendEmail);
 
   // When a user is added or removed, update the participant list
   useEffect(() => {
@@ -135,15 +138,44 @@ export default function ExpenseForm({ type = "individual", onSuccess }) {
         groupId,
       });
 
-      toast.success("Expense created successfully!");
-      reset(); // Reset form
+      // ✅ Send notification email
+      let recipients = [];
 
-      const otherParticipant = participants.find(
-        (p) => p.id !== currentUser._id
-      );
-      const otherUserId = otherParticipant?.id;
+      let other;
 
-      if (onSuccess) onSuccess(type === "individual" ? otherUserId : groupId);
+      if (type === "group") {
+        recipients = participants
+          .filter((p) => p.id !== currentUser._id) // exclude creator
+          .map((p) => p.email);
+      } else {
+        other = participants.find((p) => p.id !== currentUser._id);
+        if (other) recipients = [other.email];
+      }
+
+      if (recipients.length > 0) {
+        const html = generateExpenseEmail({
+          type,
+          creator: currentUser,
+          group: selectedGroup,
+          expense: {
+            description: data.description,
+            amount,
+            category: data.category || "Other",
+            date: data.date.getTime(),
+          },
+        });
+        for (const r of recipients) {
+          await sendMail({
+            to: r,
+            subject: "New Expense Notification 💸",
+            html: html,
+          });
+        }
+      }
+
+      toast.success("Expense created and notifications sent!");
+      reset();
+      if (onSuccess) onSuccess(type === "individual" ? other?.id : groupId);
     } catch (error) {
       toast.error("Failed to create expense: " + error.message);
     }
