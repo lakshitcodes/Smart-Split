@@ -164,13 +164,15 @@ export default function ExpenseForm({ type = "individual", onSuccess }) {
             date: data.date.getTime(),
           },
         });
-        for (const r of recipients) {
-          await sendMail({
-            to: r,
-            subject: "New Expense Notification 💸",
-            html: html,
-          });
-        }
+        await Promise.all(
+          recipients.map((r) =>
+            sendMail({
+              to: r,
+              subject: "New Expense Notification 💸",
+              html: html,
+            })
+          )
+        );
       }
 
       toast.success("Expense created and notifications sent!");
