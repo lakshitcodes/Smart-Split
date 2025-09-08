@@ -121,8 +121,16 @@ const ParticipantSelector = ({ participants, onParticipantsChange }) => {
                         Searching...
                       </p>
                     ) : (
-                      <p className="py-3 px-4 text-sm text-center text-muted-foreground">
+                      <p className="py-6 px-4 text-sm text-center text-muted-foreground">
                         No users found
+                        <br />
+                        <a
+                          href="/invite"
+                          className="font-medium text-green-600 hover:text-green-700 underline underline-offset-4 transition"
+                        >
+                          Invite a friend
+                        </a>{" "}
+                        to get started ✨
                       </p>
                     )}
                   </CommandEmpty>

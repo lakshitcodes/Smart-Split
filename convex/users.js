@@ -99,3 +99,13 @@ export const searchUsers = query({
             }));
     },
 });
+
+
+export const getUserByEmail = mutation({
+    args: { email: v.string() },
+    handler: async (ctx, { email }) => {
+        return await ctx.db.query("users")
+            .withIndex("by_email", (q) => q.eq("email", email))
+            .unique(); // returns null if not found
+    },
+});
