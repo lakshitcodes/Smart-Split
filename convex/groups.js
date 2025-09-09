@@ -1,4 +1,4 @@
-import { query } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 import { internal } from "./_generated/api";
 
@@ -196,12 +196,54 @@ export const getGroupExpenses = query({
                 id: group._id,
                 name: group.name,
                 description: group.description,
+                createdBy: group.createdBy,
             },
             members: memberDetails, // All group members with details
             expenses,       //All expenses in this group
             settlements,    // All settlements in this group
             balances,       // Calculated balance info for each member
             userLookupMap,  // Map for quick user detail access
+        };
+    },
+});
+
+// Delete a group  
+export const deleteGroup = mutation({
+    args: {
+        groupId: v.id("groups"),
+    },
+    handler: async (ctx, args) => {
+        const user = await ctx.runQuery(internal.users.getCurrentUser);
+
+        // Fetch the group
+        const group = await ctx.db.get(args.groupId);
+        if (!group) {
+            throw new Error("Group not found");
+        }
+
+        // Authorization: only group creator/admin can delete the group
+        if (group.createdBy !== user._id) {
+            throw new Error("You are not authorized to delete this group");
+        }
+
+        // Fetch all expenses linked to this group
+        const expenses = await ctx.db
+            .query("expenses")
+            .withIndex("by_group", (q) => q.eq("groupId", args.groupId))
+            .collect();
+
+        // Delete all expenses
+        for (const expense of expenses) {
+            await ctx.db.delete(expense._id);
+        }
+
+        // Finally delete the group itself
+        await ctx.db.delete(args.groupId);
+
+        return {
+            success: true,
+            deletedExpenses: expenses.length,
+            deletedGroupId: args.groupId,
         };
     },
 });

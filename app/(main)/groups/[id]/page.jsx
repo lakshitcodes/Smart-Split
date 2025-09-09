@@ -9,16 +9,25 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api } from "@/convex/_generated/api";
-import { useConvexQuery } from "@/hooks/use-convex-query";
-import { ArrowLeft, ArrowLeftRight, PlusCircle, Users } from "lucide-react";
+import { useConvexMutation, useConvexQuery } from "@/hooks/use-convex-query";
+import {
+  ArrowLeft,
+  ArrowLeftRight,
+  PlusCircle,
+  Trash2,
+  Users,
+} from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 const GroupPage = () => {
   const params = useParams();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("expenses");
+  const { data: currentUser } = useConvexQuery(api.users.getCurrentUser);
+  const deleteGroup = useConvexMutation(api.groups.deleteGroup);
 
   const { data, isLoading } = useConvexQuery(api.groups.getGroupExpenses, {
     groupId: params.id,
@@ -32,12 +41,49 @@ const GroupPage = () => {
     );
   }
 
+  const canDeleteGroup = (group) => {
+    if (!currentUser) return false;
+    return group.createdBy === currentUser._id;
+  };
+
+  const isAllSettledUp = (balances) => {
+    if (!balances || balances.length === 0) return true;
+    let settledUp = true;
+    for (const bal of balances) {
+      settledUp &&= bal.owes.length === 0 && bal.owedBy.length === 0;
+    }
+    return settledUp;
+  };
+
   const group = data?.group;
   const expenses = data?.expenses || [];
   const members = data?.members || [];
   const settlements = data?.settlements || [];
   const balance = data?.balances || 0;
   const userLookupMap = data?.userLookupMap || {};
+  const showDeleteOption = canDeleteGroup(group);
+
+  const handleDeleteGroup = async (group) => {
+    if (!isAllSettledUp(balance)) {
+      toast.error("Please settle all balances before deleting the group.");
+      return;
+    }
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this group and all its related expenses? This action cannot be undone."
+    );
+    if (!confirmed) {
+      toast.warning("Group deletion cancelled.");
+      return;
+    }
+
+    try {
+      router.push("/contacts");
+      await deleteGroup.mutate({ groupId: params.id });
+      toast.success("Group deleted successfully.");
+    } catch (error) {
+      toast.error("Failed to delete group : " + error.message);
+    }
+  };
   return (
     <div className="container mx-auto pt-0 pb-6 max-w-4xl">
       <div className="mb-6">
@@ -78,6 +124,16 @@ const GroupPage = () => {
                 Add expense
               </Link>
             </Button>
+            {showDeleteOption && (
+              <Button
+                variant="destructive"
+                className="flex-1 sm:flex-none"
+                onClick={() => handleDeleteGroup(params.id)}
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Delete
+              </Button>
+            )}
           </div>
         </div>
       </div>
