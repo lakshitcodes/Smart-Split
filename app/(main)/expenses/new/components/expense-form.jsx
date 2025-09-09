@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
-import { getAllCategories } from "@/lib/expense-categories";
+import { getAllCategories, getCategoryById } from "@/lib/expense-categories";
 import CategorySelector from "./category-selector";
 import GroupSelector from "./group-selector";
 import { useAction } from "convex/react";
@@ -151,7 +151,8 @@ export default function ExpenseForm({ type = "individual", onSuccess }) {
         other = participants.find((p) => p.id !== currentUser._id);
         if (other) recipients = [other.email];
       }
-
+      const category = getCategoryById(data.category);
+      const selectedCategory = category ? category.name : "Other";
       if (recipients.length > 0) {
         const html = generateExpenseEmail({
           type,
@@ -160,7 +161,7 @@ export default function ExpenseForm({ type = "individual", onSuccess }) {
           expense: {
             description: data.description,
             amount,
-            category: data.category || "Other",
+            category: selectedCategory,
             date: data.date.getTime(),
           },
         });
