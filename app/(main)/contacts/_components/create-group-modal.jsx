@@ -34,6 +34,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { generateGroupCreatedEmail } from "@/lib/email/group-creation-email";
+import { useAction } from "convex/react";
 
 const groupSchema = z.object({
   name: z.string().min(1, "Group name is required"),
@@ -44,6 +46,8 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
   const [selectedMembers, setSelectedMembers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [commandOpen, setCommandOpen] = useState(false);
+
+  const sendEmail = useAction(api.emails.sendEmail);
 
   const { data: currentUser } = useConvexQuery(api.users.getCurrentUser);
   const createGroup = useConvexMutation(api.contacts.createGroup);
@@ -80,13 +84,31 @@ export default function CreateGroupModal({ isOpen, onClose, onSuccess }) {
     try {
       // Extract member IDs
       const memberIds = selectedMembers.map((member) => member.id);
-
+      const groupName = data.name;
       // Create the group
       const groupId = await createGroup.mutate({
         name: data.name,
         description: data.description,
         members: memberIds,
       });
+
+      // Notify Members
+      if (selectedMembers.length > 0) {
+        const html = generateGroupCreatedEmail({
+          creator: currentUser,
+          groupName: groupName,
+          members: selectedMembers,
+        });
+        await Promise.all(
+          selectedMembers.map((r) =>
+            sendEmail({
+              to: r.email,
+              subject: `${currentUser.name} added you to the group "${data.name}"`,
+              html: html,
+            })
+          )
+        );
+      }
 
       // Success
       toast.success("Group created successfully!");

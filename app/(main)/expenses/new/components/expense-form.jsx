@@ -26,7 +26,7 @@ import { getAllCategories, getCategoryById } from "@/lib/expense-categories";
 import CategorySelector from "./category-selector";
 import GroupSelector from "./group-selector";
 import { useAction } from "convex/react";
-import { generateExpenseEmail } from "@/lib/expense-email";
+import { generateExpenseEmail } from "@/lib/email/expense-email";
 
 // Form schema validation
 const expenseSchema = z.object({
