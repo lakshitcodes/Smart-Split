@@ -1,4 +1,55 @@
 <div align="center">
+	<img src="public/logos/logo.png" alt="SmartSplit Banner" width="320"/>
+	<h1 align="center" style="font-size:2.5rem; font-weight:800; letter-spacing:1px;">
+		<span style="color:#3b82f6;">SmartSplit</span> <span style="font-size:1.5rem;">💸</span>
+	</h1>
+	<p align="center" style="font-size:1.2rem;">
+		<b>AI‑powered, real‑time expense & settlement platform for groups and individuals.</b>
+	</p>
+	<p align="center">
+		<a href="https://smartsplit-lakshit.vercel.app" target="_blank"><img src="https://img.shields.io/badge/Live%20Demo-Online-brightgreen?style=for-the-badge&logo=vercel" alt="Live Demo"></a>
+		<a href="#license"><img src="https://img.shields.io/github/license/lakshitcodes/smart-split?style=for-the-badge" alt="License"></a>
+		<a href="https://www.linkedin.com/in/jainlakshit"><img src="https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin" alt="LinkedIn"></a>
+	</p>
+	<details>
+	<summary><b>📑 Table of Contents</b></summary>
+		- [Project Overview](#-project-overview)
+		- [Features](#-features)
+		- [Tech Stack](#-tech-stack)
+		- [Screenshots & Visuals](#-screenshots--visuals)
+		- [Project Structure](#-project-structure)
+		- [Getting Started](#-getting-started)
+		- [How It Works](#-how-it-works-expense--balance--settlement)
+		- [AI Insight Flow](#-ai-insight-flow)
+		- [Usage Examples](#-usage-examples)
+		- [Development Tips](#-development-tips)
+		- [Contributing](#-contributing)
+		- [Contact](#-contact)
+		- [License](#-license)
+		- [Badges](#-badges-add-once-available)
+		- [Acknowledgments](#-acknowledgments)
+	</details>
+	---
+<h2 align="center">🧾 Project Overview</h2>
+<h2 align="center">✨ Features</h2>
+<h2 align="center">🧠 Tech Stack</h2>
+<h2 align="center">📸 Screenshots & Visuals</h2>
+<h2 align="center">🗂 Project Structure</h2>
+<h2 align="center">⚙️ Getting Started</h2>
+<h2 align="center">🔐 Auth Notes</h2>
+<h2 align="center">🧮 How It Works (Expense → Balance → Settlement)</h2>
+<h2 align="center">🤖 AI Insight Flow</h2>
+<h2 align="center">🧪 Usage Examples</h2>
+<h2 align="center">🛠 Development Tips</h2>
+<h2 align="center">🤝 Contributing</h2>
+<h2 align="center">📬 Contact</h2>
+<h2 align="center">📄 License</h2>
+<h2 align="center">🏷 Badges (Add once available)</h2>
+<h2 align="center">🙏 Acknowledgments</h2>
+<p align="center" style="color:#aaa; font-size:0.95rem;">
+	<i>Future ideas: multi-currency support, mobile PWA offline mode, receipt OCR, expense tagging intelligence.</i>
+	</p>
+<div align="center">
 	<img src="public/logos/logo-s.png" alt="SmartSplit Logo" width="120" />
 	<h1>SmartSplit</h1>
 	<p><strong>AI‑powered, real‑time expense & settlement platform for groups and individuals.</strong></p>
@@ -290,14 +341,6 @@ LinkedIn: https://www.linkedin.com/in/jainlakshit
 ## 📄 License
 
 This project is licensed under the MIT License – see the `LICENSE` file for details.
-
-## 🏷 Badges (Add once available)
-
-```
-![Build](https://img.shields.io/github/actions/workflow/status/lakshitcodes/smart-split/ci.yml)
-![License](https://img.shields.io/github/license/lakshitcodes/smart-split)
-![Stars](https://img.shields.io/github/stars/lakshitcodes/smart-split)
-```
 
 ## 🙏 Acknowledgments
 
