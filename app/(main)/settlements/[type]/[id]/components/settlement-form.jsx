@@ -14,6 +14,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import { formatCurrency } from "@/lib/formatCurrency";
+import { useAction } from "convex/react";
+import generateSettlementMail from "@/lib/email/settlement-email";
 
 // Form schema validation
 const settlementSchema = z.object({
@@ -30,6 +32,7 @@ const settlementSchema = z.object({
 export default function SettlementForm({ entityType, entityData, onSuccess }) {
   const { data: currentUser } = useConvexQuery(api.users.getCurrentUser);
   const createSettlement = useConvexMutation(api.settlements.createSettlement);
+  const sendMail = useAction(api.emails.sendEmail);
 
   // Set up form with validation
   const {
@@ -71,6 +74,33 @@ export default function SettlementForm({ entityType, entityData, onSuccess }) {
         paidByUserId,
         receivedByUserId,
         // No groupId for user settlements
+      });
+
+      const whoPaid =
+        data.paymentType === "youPaid"
+          ? currentUser.name
+          : entityData.counterpart.name;
+      const payerEmail =
+        data.paymentType === "youPaid"
+          ? currentUser.email
+          : entityData.counterpart.email;
+      const recevierEmail =
+        data.paymentType === "youPaid"
+          ? entityData.counterpart.email
+          : currentUser.email;
+
+      const html = generateSettlementMail({
+        whoPaid: whoPaid,
+        amountPaid: amount,
+        payerEmail: payerEmail,
+        groupName: null,
+        note: data.note,
+      });
+
+      await sendMail({
+        to: recevierEmail,
+        subject: `Settlement recorded with ${whoPaid}`,
+        html,
       });
 
       toast.success("Settlement recorded successfully!");
@@ -115,6 +145,32 @@ export default function SettlementForm({ entityType, entityData, onSuccess }) {
         groupId: entityData.group.id,
       });
 
+      const whoPaid =
+        data.paymentType === "youPaid"
+          ? currentUser.name
+          : entityData.counterpart.name;
+      const payerEmail =
+        data.paymentType === "youPaid"
+          ? currentUser.email
+          : entityData.counterpart.email;
+      const recevierEmail =
+        data.paymentType === "youPaid"
+          ? entityData.counterpart.email
+          : currentUser.email;
+
+      const html = generateSettlementMail({
+        whoPaid: whoPaid,
+        amountPaid: amount,
+        payerEmail: payerEmail,
+        groupName: entityData.group.name,
+        note: data.note,
+      });
+
+      await sendMail({
+        to: recevierEmail,
+        subject: `Settlement recorded with ${whoPaid}`,
+        html,
+      });
       toast.success("Settlement recorded successfully!");
       if (onSuccess) onSuccess();
     } catch (error) {
