@@ -9,13 +9,7 @@ import { useConvexMutation, useConvexQuery } from "@/hooks/use-convex-query";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/animate-ui/components/buttons/button";
 import { Label } from "@/components/ui/label";
-import {
-  Tabs,
-  TabsContent,
-  TabsContents,
-  TabsList,
-  TabsTrigger,
-} from "@/components/animate-ui/components/animate/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import ParticipantSelector from "./participant-selector";
 import SplitSelector from "./split-selector";
@@ -352,44 +346,42 @@ export default function ExpenseForm({ type = "individual", onSuccess }) {
               <TabsTrigger value="percentage">Percentage</TabsTrigger>
               <TabsTrigger value="exact">Exact Amounts</TabsTrigger>
             </TabsList>
-            <TabsContents>
-              <TabsContent value="equal" className="pt-4">
-                <p className="text-sm text-muted-foreground">
-                  Split equally among all participants
-                </p>
-                <SplitSelector
-                  type="equal"
-                  amount={parseFloat(amountValue) || 0}
-                  participants={participants}
-                  paidByUserId={paidByUserId}
-                  onSplitsChange={setSplits} // Use setSplits directly
-                />
-              </TabsContent>
-              <TabsContent value="percentage" className="pt-4">
-                <p className="text-sm text-muted-foreground">
-                  Split by percentage
-                </p>
-                <SplitSelector
-                  type="percentage"
-                  amount={parseFloat(amountValue) || 0}
-                  participants={participants}
-                  paidByUserId={paidByUserId}
-                  onSplitsChange={setSplits} // Use setSplits directly
-                />
-              </TabsContent>
-              <TabsContent value="exact" className="pt-4">
-                <p className="text-sm text-muted-foreground">
-                  Enter exact amounts
-                </p>
-                <SplitSelector
-                  type="exact"
-                  amount={parseFloat(amountValue) || 0}
-                  participants={participants}
-                  paidByUserId={paidByUserId}
-                  onSplitsChange={setSplits} // Use setSplits directly
-                />
-              </TabsContent>
-            </TabsContents>
+            <TabsContent value="equal" className="pt-4">
+              <p className="text-sm text-muted-foreground">
+                Split equally among all participants
+              </p>
+              <SplitSelector
+                type="equal"
+                amount={parseFloat(amountValue) || 0}
+                participants={participants}
+                paidByUserId={paidByUserId}
+                onSplitsChange={setSplits} // Use setSplits directly
+              />
+            </TabsContent>
+            <TabsContent value="percentage" className="pt-4">
+              <p className="text-sm text-muted-foreground">
+                Split by percentage
+              </p>
+              <SplitSelector
+                type="percentage"
+                amount={parseFloat(amountValue) || 0}
+                participants={participants}
+                paidByUserId={paidByUserId}
+                onSplitsChange={setSplits} // Use setSplits directly
+              />
+            </TabsContent>
+            <TabsContent value="exact" className="pt-4">
+              <p className="text-sm text-muted-foreground">
+                Enter exact amounts
+              </p>
+              <SplitSelector
+                type="exact"
+                amount={parseFloat(amountValue) || 0}
+                participants={participants}
+                paidByUserId={paidByUserId}
+                onSplitsChange={setSplits} // Use setSplits directly
+              />
+            </TabsContent>
           </Tabs>
         </div>
       </div>

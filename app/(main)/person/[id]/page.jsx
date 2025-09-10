@@ -156,78 +156,82 @@ const PersonPage = () => {
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <h1 className="text-4xl gradient-title">
+                    <h1 className="text-3xl lg:text-4xl gradient-title">
                       {otherUser?.name}
                     </h1>
                     <p className="text-muted-foreground">{otherUser?.email}</p>
                   </div>
                 </div>
 
-                <div className="flex gap-2 w-full sm:w-auto">
-                  <Button
-                    asChild
-                    variant="outline"
-                    className="flex-1 sm:flex-none"
-                  >
-                    <Link href={`/settlements/user/${params.id}`}>
-                      <ArrowLeftRight className="mr-2 h-4 w-4" />
-                      Settle up
-                    </Link>
-                  </Button>
-                  <Button asChild className="flex-1 sm:flex-none">
-                    <Link href={`/expenses/new`}>
-                      <PlusCircle className="mr-2 h-4 w-4" />
-                      Add expense
-                    </Link>
-                  </Button>
-                  <Dialog
-                    open={reminderDialogOpen}
-                    onOpenChange={setReminderDialogOpen}
-                  >
-                    <DialogTrigger asChild>
-                      <Button variant="secondary" asChild>
-                        <Link href="#">
-                          <Bell className="mr-2 h-4 w-4" />
-                          Send Reminder
-                        </Link>
-                      </Button>
-                    </DialogTrigger>
-
-                    <DialogContent className="sm:max-w-md">
-                      <DialogHeader>
-                        <DialogTitle>Send Reminder</DialogTitle>
-                        <DialogDescription>
-                          You can add an optional note that will be sent in the
-                          reminder.
-                        </DialogDescription>
-                      </DialogHeader>
-
-                      <div className="py-2">
-                        <Input
-                          placeholder="Write a note (optional)"
-                          value={note}
-                          onChange={(e) => setNote(e.target.value)}
-                        />
-                      </div>
-
-                      <DialogFooter className="flex justify-end gap-2">
-                        <Button
-                          variant="outline"
-                          onClick={() => setReminderDialogOpen(false)}
-                        >
-                          <XCircle className="mr-2 h-4 w-4" />
-                          Cancel
+                <div className="flex gap-2 w-full sm:w-auto flex-col md:flex-row">
+                  <div className="grid grid-cols-2 gap-2 w-full md:w-auto md:flex md:gap-2">
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="w-full md:w-auto flex-1"
+                    >
+                      <Link href={`/settlements/user/${params.id}`}>
+                        <ArrowLeftRight className="mr-2 h-4 w-4" />
+                        Settle up
+                      </Link>
+                    </Button>
+                    <Button asChild className="w-full md:w-auto flex-1">
+                      <Link href={`/expenses/new`}>
+                        <PlusCircle className="mr-2 h-4 w-4" />
+                        Add expense
+                      </Link>
+                    </Button>
+                  </div>
+                  <div>
+                    <Dialog
+                      open={reminderDialogOpen}
+                      onOpenChange={setReminderDialogOpen}
+                    >
+                      <DialogTrigger asChild>
+                        <Button variant="secondary" asChild className="w-full">
+                          <Link href="#">
+                            <Bell className="mr-2 h-4 w-4" />
+                            Send Reminder
+                          </Link>
                         </Button>
-                        <Button
-                          onClick={handleSendReminder}
-                          disabled={isSendingEmail}
-                        >
-                          <Send className="mr-2 h-4 w-4" />
-                          {note ? "Send with Note" : "Send Anyway"}
-                        </Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
+                      </DialogTrigger>
+
+                      <DialogContent className="sm:max-w-md">
+                        <DialogHeader>
+                          <DialogTitle>Send Reminder</DialogTitle>
+                          <DialogDescription>
+                            You can add an optional note that will be sent in
+                            the reminder.
+                          </DialogDescription>
+                        </DialogHeader>
+
+                        <div className="py-2">
+                          <Input
+                            placeholder="Write a note (optional)"
+                            value={note}
+                            onChange={(e) => setNote(e.target.value)}
+                          />
+                        </div>
+
+                        <DialogFooter className="flex justify-end gap-2">
+                          <Button
+                            variant="outline"
+                            onClick={() => setReminderDialogOpen(false)}
+                          >
+                            <XCircle className="mr-2 h-4 w-4" />
+                            Cancel
+                          </Button>
+                          <Button
+                            onClick={handleSendReminder}
+                            disabled={isSendingEmail}
+                          >
+                            <Send className="mr-2 h-4 w-4" />
+                            {note ? "Send with Note" : "Send Anyway"}
+                          </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
                 </div>
               </div>
             </motion.div>
