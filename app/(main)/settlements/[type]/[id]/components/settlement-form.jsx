@@ -290,7 +290,7 @@ export default function SettlementForm({ entityType, entityData, onSuccess }) {
                 onChange: (e) => {
                   const v = parseFloat(e.target.value);
                   if (canSettle && v > maxAmount) {
-                    e.target.value = maxAmount.toString();
+                    e.target.value = maxAmount.toFixed(2).toString();
                     toast.error(
                       `Amount cannot exceed ${formatCurrency(maxAmount)}`
                     );
