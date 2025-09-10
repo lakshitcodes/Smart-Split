@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -39,6 +39,7 @@ export default function SettlementForm({ entityType, entityData, onSuccess }) {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(settlementSchema),
@@ -190,6 +191,8 @@ export default function SettlementForm({ entityType, entityData, onSuccess }) {
   if (entityType === "user") {
     const otherUser = entityData.counterpart;
     const netBalance = entityData.netBalance;
+    const maxAmount = Math.abs(netBalance);
+    const canSettle = netBalance !== 0;
 
     return (
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -233,33 +236,39 @@ export default function SettlementForm({ entityType, entityData, onSuccess }) {
               });
             }}
           >
-            <div className="flex items-center space-x-2 border rounded-md p-3">
-              <RadioGroupItem value="youPaid" id="youPaid" />
-              <Label htmlFor="youPaid" className="flex-grow cursor-pointer">
-                <div className="flex items-center">
-                  <Avatar className="h-6 w-6 mr-2">
-                    <AvatarImage src={currentUser.imageUrl} />
-                    <AvatarFallback>
-                      {currentUser.name.charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span>You paid {otherUser.name}</span>
-                </div>
-              </Label>
-            </div>
+            {netBalance < 0 && (
+              <div className="flex items-center space-x-2 border rounded-md p-3">
+                <RadioGroupItem value="youPaid" id="youPaid" />
+                <Label htmlFor="youPaid" className="flex-grow cursor-pointer">
+                  <div className="flex items-center">
+                    <Avatar className="h-6 w-6 mr-2">
+                      <AvatarImage src={currentUser.imageUrl} />
+                      <AvatarFallback>
+                        {currentUser.name.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span>You paid {otherUser.name}</span>
+                  </div>
+                </Label>
+              </div>
+            )}
 
-            <div className="flex items-center space-x-2 border rounded-md p-3">
-              <RadioGroupItem value="theyPaid" id="theyPaid" />
-              <Label htmlFor="theyPaid" className="flex-grow cursor-pointer">
-                <div className="flex items-center">
-                  <Avatar className="h-6 w-6 mr-2">
-                    <AvatarImage src={otherUser.imageUrl} />
-                    <AvatarFallback>{otherUser.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <span>{otherUser.name} paid you</span>
-                </div>
-              </Label>
-            </div>
+            {netBalance > 0 && (
+              <div className="flex items-center space-x-2 border rounded-md p-3">
+                <RadioGroupItem value="theyPaid" id="theyPaid" />
+                <Label htmlFor="theyPaid" className="flex-grow cursor-pointer">
+                  <div className="flex items-center">
+                    <Avatar className="h-6 w-6 mr-2">
+                      <AvatarImage src={otherUser.imageUrl} />
+                      <AvatarFallback>
+                        {otherUser.name.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span>{otherUser.name} paid you</span>
+                  </div>
+                </Label>
+              </div>
+            )}
           </RadioGroup>
         </div>
 
@@ -274,12 +283,29 @@ export default function SettlementForm({ entityType, entityData, onSuccess }) {
               type="number"
               step="0.01"
               min="0.01"
+              max={canSettle ? maxAmount : undefined}
+              disabled={!canSettle}
               className="pl-7"
-              {...register("amount")}
+              {...register("amount", {
+                onChange: (e) => {
+                  const v = parseFloat(e.target.value);
+                  if (canSettle && v > maxAmount) {
+                    e.target.value = maxAmount.toString();
+                    toast.error(
+                      `Amount cannot exceed ${formatCurrency(maxAmount)}`
+                    );
+                  }
+                },
+              })}
             />
           </div>
           {errors.amount && (
             <p className="text-sm text-red-500">{errors.amount.message}</p>
+          )}
+          {!errors.amount && canSettle && (
+            <p className="text-xs text-muted-foreground">
+              Max: {formatCurrency(maxAmount)}
+            </p>
           )}
         </div>
 
@@ -293,7 +319,11 @@ export default function SettlementForm({ entityType, entityData, onSuccess }) {
           />
         </div>
 
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={isSubmitting || !canSettle}
+        >
           {isSubmitting ? "Recording..." : "Record settlement"}
         </Button>
       </form>
@@ -303,6 +333,18 @@ export default function SettlementForm({ entityType, entityData, onSuccess }) {
   // Render form for group settlement
   if (entityType === "group") {
     const groupMembers = entityData.balances;
+    // Derive the currently selected member and directional balance info
+    const selectedMember = groupMembers.find(
+      (m) => m.userId === selectedGroupMemberId
+    );
+    // NOTE: netBalance semantics (kept consistent with earlier mapping logic):
+    //  > 0  => you owe them
+    //  < 0  => they owe you
+    const selectedNet = selectedMember?.netBalance;
+    const selectedYouOweThem = selectedNet > 0; // you must pay -> show "youPaid"
+    const selectedTheyOweYou = selectedNet < 0; // they must pay -> show "theyPaid"
+    const groupMaxAmount = selectedMember ? Math.abs(selectedNet) : 0;
+    const canGroupSettle = Boolean(selectedMember) && selectedNet !== 0;
 
     return (
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -365,70 +407,79 @@ export default function SettlementForm({ entityType, entityData, onSuccess }) {
             {/* Payment direction */}
             <div className="space-y-2">
               <Label>Who paid?</Label>
-              <RadioGroup
-                defaultValue="youPaid"
+              <input
+                type="hidden"
                 {...register("paymentType")}
+                value={selectedTheyOweYou ? "theyPaid" : "youPaid"}
+              />
+              <RadioGroup
+                value={selectedTheyOweYou ? "theyPaid" : "youPaid"}
                 className="flex flex-col space-y-2"
-                onValueChange={(value) => {
-                  register("paymentType").onChange({
-                    target: { name: "paymentType", value },
-                  });
-                }}
+                onValueChange={(value) =>
+                  setValue("paymentType", value, { shouldValidate: true })
+                }
               >
-                <div className="flex items-center space-x-2 border rounded-md p-3">
-                  <RadioGroupItem value="youPaid" id="youPaid" />
-                  <Label htmlFor="youPaid" className="flex-grow cursor-pointer">
-                    <div className="flex items-center">
-                      <Avatar className="h-6 w-6 mr-2">
-                        <AvatarImage src={currentUser.imageUrl} />
-                        <AvatarFallback>
-                          {currentUser.name.charAt(0)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <span>
-                        You paid{" "}
-                        {
-                          groupMembers.find(
-                            (m) => m.userId === selectedGroupMemberId
-                          )?.name
-                        }
-                      </span>
-                    </div>
-                  </Label>
-                </div>
-
-                <div className="flex items-center space-x-2 border rounded-md p-3">
-                  <RadioGroupItem value="theyPaid" id="theyPaid" />
-                  <Label
-                    htmlFor="theyPaid"
-                    className="flex-grow cursor-pointer"
-                  >
-                    <div className="flex items-center">
-                      <Avatar className="h-6 w-6 mr-2">
-                        <AvatarImage
-                          src={
+                {selectedYouOweThem && (
+                  <div className="flex items-center space-x-2 border rounded-md p-3">
+                    <RadioGroupItem value="youPaid" id="youPaid" />
+                    <Label
+                      htmlFor="youPaid"
+                      className="flex-grow cursor-pointer"
+                    >
+                      <div className="flex items-center">
+                        <Avatar className="h-6 w-6 mr-2">
+                          <AvatarImage src={currentUser.imageUrl} />
+                          <AvatarFallback>
+                            {currentUser.name.charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span>
+                          You paid{" "}
+                          {
                             groupMembers.find(
                               (m) => m.userId === selectedGroupMemberId
-                            )?.imageUrl
+                            )?.name
                           }
-                        />
-                        <AvatarFallback>
-                          {groupMembers
-                            .find((m) => m.userId === selectedGroupMemberId)
-                            ?.name.charAt(0)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <span>
-                        {
-                          groupMembers.find(
-                            (m) => m.userId === selectedGroupMemberId
-                          )?.name
-                        }{" "}
-                        paid you
-                      </span>
-                    </div>
-                  </Label>
-                </div>
+                        </span>
+                      </div>
+                    </Label>
+                  </div>
+                )}
+
+                {selectedTheyOweYou && (
+                  <div className="flex items-center space-x-2 border rounded-md p-3">
+                    <RadioGroupItem value="theyPaid" id="theyPaid" />
+                    <Label
+                      htmlFor="theyPaid"
+                      className="flex-grow cursor-pointer"
+                    >
+                      <div className="flex items-center">
+                        <Avatar className="h-6 w-6 mr-2">
+                          <AvatarImage
+                            src={
+                              groupMembers.find(
+                                (m) => m.userId === selectedGroupMemberId
+                              )?.imageUrl
+                            }
+                          />
+                          <AvatarFallback>
+                            {groupMembers
+                              .find((m) => m.userId === selectedGroupMemberId)
+                              ?.name.charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span>
+                          {
+                            groupMembers.find(
+                              (m) => m.userId === selectedGroupMemberId
+                            )?.name
+                          }{" "}
+                          paid you
+                        </span>
+                      </div>
+                    </Label>
+                  </div>
+                )}
               </RadioGroup>
             </div>
 
@@ -443,12 +494,29 @@ export default function SettlementForm({ entityType, entityData, onSuccess }) {
                   type="number"
                   step="0.01"
                   min="0.01"
+                  max={canGroupSettle ? groupMaxAmount : undefined}
+                  disabled={!canGroupSettle}
                   className="pl-7"
-                  {...register("amount")}
+                  {...register("amount", {
+                    onChange: (e) => {
+                      const v = parseFloat(e.target.value);
+                      if (canGroupSettle && v > groupMaxAmount) {
+                        e.target.value = groupMaxAmount.toFixed(2).toString();
+                        toast.warning(
+                          `Amount cannot exceed ${formatCurrency(groupMaxAmount)}`
+                        );
+                      }
+                    },
+                  })}
                 />
               </div>
               {errors.amount && (
                 <p className="text-sm text-red-500">{errors.amount.message}</p>
+              )}
+              {!errors.amount && canGroupSettle && (
+                <p className="text-xs text-muted-foreground">
+                  Max: {formatCurrency(groupMaxAmount)}
+                </p>
               )}
             </div>
 
@@ -467,7 +535,7 @@ export default function SettlementForm({ entityType, entityData, onSuccess }) {
         <Button
           type="submit"
           className="w-full"
-          disabled={isSubmitting || !selectedGroupMemberId}
+          disabled={isSubmitting || !selectedGroupMemberId || !canGroupSettle}
         >
           {isSubmitting ? "Recording..." : "Record settlement"}
         </Button>
