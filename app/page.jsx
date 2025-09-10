@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/animate-ui/components/buttons/button";
+import { ArrowUpRight, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { FEATURES, STEPS, TESTIMONIALS } from "../lib/landing";
@@ -158,17 +158,30 @@ export default function Home() {
             Join thousands of users who have made splitting expenses stressfree.
           </p>
 
-          <Button
-            asChild
-            variant="outline"
-            size={"lg"}
-            className="text-green-700 hover:opacity-90 hover:text-green-600"
-          >
-            <Link href="/dashboard">
-              Get Started
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+            <Button
+              asChild
+              variant="outline"
+              size={"lg"}
+              className="text-green-700 hover:opacity-90 hover:text-green-600"
+            >
+              <Link href="/dashboard">
+                Get Started
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              size={"lg"}
+              className="text-green-700 hover:opacity-90 hover:text-green-600"
+            >
+              <Link href="/invite">
+                Invite Friends
+                <ArrowUpRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
     </div>

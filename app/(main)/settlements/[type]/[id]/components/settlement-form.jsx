@@ -7,7 +7,7 @@ import * as z from "zod";
 import { api } from "@/convex/_generated/api";
 import { useConvexMutation, useConvexQuery } from "@/hooks/use-convex-query";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/animate-ui/components/buttons/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -146,17 +146,11 @@ export default function SettlementForm({ entityType, entityData, onSuccess }) {
       });
 
       const whoPaid =
-        data.paymentType === "youPaid"
-          ? currentUser.name
-          : selectedUser.name;
+        data.paymentType === "youPaid" ? currentUser.name : selectedUser.name;
       const payerEmail =
-        data.paymentType === "youPaid"
-          ? currentUser.email
-          : selectedUser.email;
+        data.paymentType === "youPaid" ? currentUser.email : selectedUser.email;
       const recevierEmail =
-        data.paymentType === "youPaid"
-          ? selectedUser.email
-          : currentUser.email;
+        data.paymentType === "youPaid" ? selectedUser.email : currentUser.email;
 
       const html = generateSettlementMail({
         whoPaid: whoPaid,

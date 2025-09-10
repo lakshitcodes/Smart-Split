@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Button } from "./ui/button";
+
 import { LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 import { SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
@@ -10,6 +10,7 @@ import { BarLoader } from "react-spinners";
 import { Authenticated, Unauthenticated } from "convex/react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { Button } from "./animate-ui/components/buttons/button";
 
 const Header = () => {
   const { isLoading } = useStoreUser();
