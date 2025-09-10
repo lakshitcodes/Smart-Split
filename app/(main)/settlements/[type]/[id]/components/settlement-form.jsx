@@ -148,14 +148,14 @@ export default function SettlementForm({ entityType, entityData, onSuccess }) {
       const whoPaid =
         data.paymentType === "youPaid"
           ? currentUser.name
-          : entityData.counterpart.name;
+          : selectedUser.name;
       const payerEmail =
         data.paymentType === "youPaid"
           ? currentUser.email
-          : entityData.counterpart.email;
+          : selectedUser.email;
       const recevierEmail =
         data.paymentType === "youPaid"
-          ? entityData.counterpart.email
+          ? selectedUser.email
           : currentUser.email;
 
       const html = generateSettlementMail({
