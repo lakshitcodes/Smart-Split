@@ -7,9 +7,15 @@ import * as z from "zod";
 import { api } from "@/convex/_generated/api";
 import { useConvexMutation, useConvexQuery } from "@/hooks/use-convex-query";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/animate-ui/components/buttons/button";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsContents,
+  TabsList,
+  TabsTrigger,
+} from "@/components/animate-ui/components/animate/tabs";
 import { toast } from "sonner";
 import ParticipantSelector from "./participant-selector";
 import SplitSelector from "./split-selector";
@@ -19,7 +25,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/components/animate-ui/components/radix/popover";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { getAllCategories, getCategoryById } from "@/lib/expense-categories";
@@ -346,42 +352,44 @@ export default function ExpenseForm({ type = "individual", onSuccess }) {
               <TabsTrigger value="percentage">Percentage</TabsTrigger>
               <TabsTrigger value="exact">Exact Amounts</TabsTrigger>
             </TabsList>
-            <TabsContent value="equal" className="pt-4">
-              <p className="text-sm text-muted-foreground">
-                Split equally among all participants
-              </p>
-              <SplitSelector
-                type="equal"
-                amount={parseFloat(amountValue) || 0}
-                participants={participants}
-                paidByUserId={paidByUserId}
-                onSplitsChange={setSplits} // Use setSplits directly
-              />
-            </TabsContent>
-            <TabsContent value="percentage" className="pt-4">
-              <p className="text-sm text-muted-foreground">
-                Split by percentage
-              </p>
-              <SplitSelector
-                type="percentage"
-                amount={parseFloat(amountValue) || 0}
-                participants={participants}
-                paidByUserId={paidByUserId}
-                onSplitsChange={setSplits} // Use setSplits directly
-              />
-            </TabsContent>
-            <TabsContent value="exact" className="pt-4">
-              <p className="text-sm text-muted-foreground">
-                Enter exact amounts
-              </p>
-              <SplitSelector
-                type="exact"
-                amount={parseFloat(amountValue) || 0}
-                participants={participants}
-                paidByUserId={paidByUserId}
-                onSplitsChange={setSplits} // Use setSplits directly
-              />
-            </TabsContent>
+            <TabsContents>
+              <TabsContent value="equal" className="pt-4">
+                <p className="text-sm text-muted-foreground">
+                  Split equally among all participants
+                </p>
+                <SplitSelector
+                  type="equal"
+                  amount={parseFloat(amountValue) || 0}
+                  participants={participants}
+                  paidByUserId={paidByUserId}
+                  onSplitsChange={setSplits} // Use setSplits directly
+                />
+              </TabsContent>
+              <TabsContent value="percentage" className="pt-4">
+                <p className="text-sm text-muted-foreground">
+                  Split by percentage
+                </p>
+                <SplitSelector
+                  type="percentage"
+                  amount={parseFloat(amountValue) || 0}
+                  participants={participants}
+                  paidByUserId={paidByUserId}
+                  onSplitsChange={setSplits} // Use setSplits directly
+                />
+              </TabsContent>
+              <TabsContent value="exact" className="pt-4">
+                <p className="text-sm text-muted-foreground">
+                  Enter exact amounts
+                </p>
+                <SplitSelector
+                  type="exact"
+                  amount={parseFloat(amountValue) || 0}
+                  participants={participants}
+                  paidByUserId={paidByUserId}
+                  onSplitsChange={setSplits} // Use setSplits directly
+                />
+              </TabsContent>
+            </TabsContents>
           </Tabs>
         </div>
       </div>
