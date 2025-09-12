@@ -3,7 +3,8 @@ import { fetchQuery } from "convex/nextjs";
 
 export async function generateMetadata({ params }) {
     // Fetch user data from Convex using server-side fetchQuery
-    const { type, id } = params;
+    const resolvedParams = await params;
+    const { type, id } = resolvedParams;
     let name = "User";
     if (type === "user") {
 
