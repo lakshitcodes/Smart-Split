@@ -2,7 +2,7 @@
   "name": "SmartSplit",
   "short_name": "SmartSplit",
   "start_url": "/dashboard",
-  "display": "fullscreen-sticky",
+  "display": "fullscreen",
   "background_color": "#ffffff",
   "theme_color": "#3b82f6",
   "orientation": "portrait",
