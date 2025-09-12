@@ -109,3 +109,11 @@ export const getUserByEmail = mutation({
             .unique(); // returns null if not found
     },
 });
+
+
+export const getUserById = query({
+    args: { id: v.id("users") },
+    handler: async (ctx, { id }) => {
+        return await ctx.db.get(id);
+    },
+})

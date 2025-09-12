@@ -247,3 +247,13 @@ export const deleteGroup = mutation({
         };
     },
 });
+
+// Get group by id
+export const getGroupById = query({
+    args: { groupId: v.id("groups") },
+    handler: async (ctx, { groupId }) => {
+        const group = await ctx.db.get(groupId);
+        if (!group) throw new Error("Group not found");
+        return group;
+    },
+});
