@@ -77,7 +77,7 @@ export default function ContactsPage() {
         exit="hidden"
         variants={listVariants}
       >
-        <div className="container mx-auto pt-0 pb-10 max-w-5xl">
+        <div className="container mx-auto pt-0 pb-10 max-w-5xl -mt-17 sm:mt-0">
           <Button
             variant="outline"
             size="sm"

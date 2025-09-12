@@ -75,7 +75,7 @@ const Dashboard = () => {
                 variants={itemVariants}
                 transition={{ type: "tween" }}
               >
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 -mt-13 sm:mt-0">
                   <h1 className="md:text-5xl text-4xl gradient-title">
                     Dashboard
                   </h1>

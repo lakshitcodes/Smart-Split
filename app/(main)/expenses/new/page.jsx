@@ -39,7 +39,7 @@ const NewExpensePage = () => {
         exit="hidden"
         variants={listVariants}
       >
-        <div className="container max-w-3xl mx-auto py-6">
+        <div className="container max-w-3xl mx-auto py-6 -mt-22 sm:mt-0">
           <Button
             variant="outline"
             size="sm"

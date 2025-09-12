@@ -113,7 +113,7 @@ const GroupPage = () => {
         exit="hidden"
         variants={listVariants}
       >
-        <div className="container mx-auto pt-0 pb-6 max-w-4xl">
+        <div className="container mx-auto pt-0 pb-6 max-w-4xl -mt-17 sm:mt-0">
           <motion.div
             key="Group Header"
             variants={itemVariants}

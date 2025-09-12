@@ -41,7 +41,7 @@ export default function AboutPage() {
   };
 
   return (
-    <main className="min-h-screen bg-white py-12 px-4 mt-10 overflow-clip">
+    <main className="min-h-screen bg-white py-12 px-4 overflow-clip sm:mt-q0">
       <div className="relative max-w-6xl mx-auto">
         {/* Decorative animated blob */}
         <motion.div

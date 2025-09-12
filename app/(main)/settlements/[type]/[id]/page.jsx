@@ -64,7 +64,7 @@ export default function SettlementPage() {
         exit="hidden"
         variants={listVariants}
       >
-        <div className="container mx-auto pt-0 pb-6 max-w-lg">
+        <div className="container mx-auto pt-0 pb-6 max-w-lg -mt-17 sm:mt-0">
           <Button
             variant="outline"
             size="sm"
