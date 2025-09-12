@@ -1,3 +1,5 @@
+"use client";
+
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
@@ -6,15 +8,14 @@ import { ClerkProvider } from "@clerk/nextjs";
 import Footer from "@/components/Footer";
 import { Toaster } from "sonner";
 import BottomNavbar from "@/components/navbar";
+import { useState } from "react";
+import SmartSplitSplash from "@/components/SmartSplitSplash";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata = {
-  title: "SmartSplit",
-  description: "A smart way to split expenses",
-};
-
 export default function RootLayout({ children }) {
+
+  const [showSplash, setShowSplash] = useState(true);
   return (
     <html lang="en">
       <head>
@@ -32,7 +33,15 @@ export default function RootLayout({ children }) {
         <ClerkProvider>
           <ConvexClientProvider>
 
-
+            {showSplash && (
+              <SmartSplitSplash
+                logoSrc="/logos/logo-s.png"                 // optional: put your logo in public/
+                appName="SmartSplit"
+                accentShade="emerald"
+                duration={3000}                     // ms
+                onFinish={() => setShowSplash(false)}
+              />
+            )}
             <Header />
             <main className="min-h-screen">
               {children}
