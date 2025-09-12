@@ -6,7 +6,7 @@ import { Linkedin, Github, UserPlus, Info } from "lucide-react";
 
 export default function Footer({ onInvite }) {
   return (
-    <footer className="bottom-0 border-t bg-gray-50 py-10 flex justify-center text-center items-center">
+    <footer className="bottom-0 border-t bg-gray-50 py-10 flex justify-center text-center items-center mb-10 sm:mb-0">
       <div className="w-full max-w-4/5">
         <div className="rounded-xl border bg-white shadow-sm p-6 flex flex-col md:flex-row sm:items-center sm:justify-between gap-4">
           {/* Left: Made by */}
