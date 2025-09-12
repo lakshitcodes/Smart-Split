@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
 
       </head>
       <body
-        className={`${inter.className}`}
+        className={`${inter.className} min-h-[100dvh]`}
       >
         <ClerkProvider>
           <ConvexClientProvider>
