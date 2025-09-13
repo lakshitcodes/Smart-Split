@@ -136,17 +136,26 @@ export const getSettlementData = query({
         .collect();
 
       const settlements = [...mySettlements, ...otherUserSettlements];
-
+      console.log("owing/owed before settlements:", owing, owed);
       for (const st of settlements) {
-        if (st.paidByUserId === me._id) {
+        if (st.paidByUserId === me._id && st.receivedByUserId === other._id) {
           // I paid them ⇒ my owing goes down
-          owing = Math.max(0, owing - st.amount);
-        } else {
+          owing -= st.amount;
+        } else if (st.paidByUserId === other._id && st.receivedByUserId === me._id) {
           // They paid me ⇒ their owing goes down
-          owed = Math.max(0, owed - st.amount);
+          owed -= st.amount;
         }
       }
 
+      let newOwing = Math.max(0, owing), newOwed = Math.max(0, owed);
+      if (owing < 0) {
+        newOwed += (-owing);
+      }
+      if (owed < 0) {
+        newOwing += (-owed);
+      }
+      owing = newOwing;
+      owed = newOwed;
       return {
         type: "user",
         counterpart: {
@@ -185,13 +194,13 @@ export const getSettlementData = query({
           // I paid; others may owe me
           exp.splits.forEach((split) => {
             if (split.userId !== me._id && !split.paid) {
-              balances[split.userId].owed += split.amount;
+              balances[split.userId].owing += split.amount;
             }
           });
         } else if (balances[exp.paidByUserId]) {
           // Someone else in the group paid; I may owe them
           const split = exp.splits.find((s) => s.userId === me._id && !s.paid);
-          if (split) balances[exp.paidByUserId].owing += split.amount;
+          if (split) balances[exp.paidByUserId].owed += split.amount;
         }
       }
 
@@ -204,16 +213,10 @@ export const getSettlementData = query({
       for (const st of settlements) {
         // we only care if ONE side is me
         if (st.paidByUserId === me._id && balances[st.receivedByUserId]) {
-          balances[st.receivedByUserId].owing = Math.max(
-            0,
-            balances[st.receivedByUserId].owing - st.amount
-          );
+          balances[st.receivedByUserId].owed -= st.amount;
         }
         if (st.receivedByUserId === me._id && balances[st.paidByUserId]) {
-          balances[st.paidByUserId].owed = Math.max(
-            0,
-            balances[st.paidByUserId].owed - st.amount
-          );
+          balances[st.paidByUserId].owing -= st.amount;
         }
       }
 

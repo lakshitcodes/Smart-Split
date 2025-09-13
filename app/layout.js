@@ -30,7 +30,25 @@ export default function RootLayout({ children }) {
       <body
         className={`${inter.className} min-h-[100dvh]`}
       >
-        <ClerkProvider>
+        <ClerkProvider
+          appearance={{
+            variables: {
+              colorPrimary: "#16A34A", // Tailwind green-600
+              colorText: "#111827", // Tailwind gray-900
+              colorBackground: "#fff",
+              borderRadius: "0.75rem", // rounded-xl
+              fontFamily: inter.style.fontFamily,
+            },
+            elements: {
+              card: "shadow-xl border border-gray-200",
+              headerTitle: "text-green-600 text-2xl font-extrabold",
+              socialButtonsBlockButton: "bg-green-50 hover:bg-green-100 text-green-700 border-green-200",
+              formButtonPrimary: "bg-green-600 hover:bg-green-700 text-white font-semibold",
+              footerAction: "text-green-600 hover:underline",
+            },
+          }}
+          fallbackRedirectUrl="/dashboard"
+        >
           <ConvexClientProvider>
 
             {showSplash && (
@@ -38,7 +56,7 @@ export default function RootLayout({ children }) {
                 logoSrc="/logos/logo-s.png"                 // optional: put your logo in public/
                 appName="SmartSplit"
                 accentShade="emerald"
-                duration={3000}                     // ms
+                duration={1300}                     // ms
                 onFinish={() => setShowSplash(false)}
               />
             )}

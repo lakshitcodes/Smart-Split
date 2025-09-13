@@ -1,9 +1,9 @@
 import { Divide } from 'lucide-react'
 import React from 'react'
 
-const AuthLayout = ({children}) => {
+const AuthLayout = ({ children }) => {
   return (
-    <div className="flex justify-center pt-40">{children}</div>
+    <div className="flex justify-center pt-7 sm:pt-25">{children}</div>
   )
 }
 

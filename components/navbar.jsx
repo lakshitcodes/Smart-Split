@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { Home, Users, CirclePlus, UserPlus2 } from "lucide-react";
+import { Home, Users, CirclePlus, UserPlus2, LogIn } from "lucide-react";
 import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
@@ -11,6 +11,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "./animate-ui/components/animate/tabs";
+import { Authenticated, Unauthenticated } from "convex/react";
 
 const routeToTab = (pathname) => {
   if (pathname.startsWith("/dashboard")) return "dashboard";
@@ -22,6 +23,8 @@ const routeToTab = (pathname) => {
   ) {
     return "contacts";
   }
+  if (pathname.startsWith("/sign-in") || pathname.startsWith("/sign-up"))
+    return "sign-in";
   if (pathname.startsWith("/expenses/new")) return "addexpense";
   if (pathname.startsWith("/profile") || pathname.startsWith("/account"))
     return "profile";
@@ -76,19 +79,33 @@ const BottomNavbar = () => {
             </Link>
           </TabsTrigger>
 
-          <TabsTrigger value="profile" asChild>
-            <span className="flex flex-col items-center gap-0.5">
-              <UserButton
-                afterSignOutUrl="/"
-                appearance={{
-                  elements: {
-                    avatarBox:
-                      "h-8 w-8 rounded-full border-2 border-emerald-500",
-                  },
-                }}
-              />
-            </span>
-          </TabsTrigger>
+          <Authenticated>
+            <TabsTrigger value="profile" asChild>
+              <span className="flex flex-col items-center gap-0.5">
+                <UserButton
+                  afterSignOutUrl="/"
+                  appearance={{
+                    elements: {
+                      avatarBox:
+                        "h-8 w-8 rounded-full border-2 border-emerald-500",
+                    },
+                  }}
+                />
+              </span>
+            </TabsTrigger>
+          </Authenticated>
+
+          <Unauthenticated>
+            <TabsTrigger value="sign-in" asChild>
+              <Link
+                href="/sign-in"
+                className="flex flex-col items-center gap-0.5"
+              >
+                <LogIn className="h-8 w-8" />
+                <span className="text-[10px] font-medium">Get Started</span>
+              </Link>
+            </TabsTrigger>
+          </Unauthenticated>
         </TabsList>
       </Tabs>
     </nav>

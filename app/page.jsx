@@ -9,8 +9,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Home() {
   return (
-    <div className="flex flex-col pt-16">
-      <section className="mt-20 pb-12 space-y-10 md:space-y-20 px-5">
+    <div className="flex flex-col pt-10 sm:pt-16">
+      <div className="flex justify-center sm:hidden">
+        <Image src="/logos/logo.png" width="250" height="80" alt="Logo" />
+      </div>
+      <section className="mt-6 sm:mt-20 pb-12 space-y-10 md:space-y-20 px-5">
         <div className="container mx-auto px-4 md:px-6 text-center space-y-6">
           <Badge variant="outline" className="bg-green-100 text-green-700">
             Split Expenses. Simplify Life.
