@@ -16,11 +16,13 @@ import { toast } from "sonner";
 import { api } from "@/convex/_generated/api";
 import { useConvexQuery } from "@/hooks/use-convex-query";
 import { useAction, useMutation } from "convex/react";
+import { useRouter } from "next/navigation";
 
 const InviteForm = () => {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const router = useRouter();
 
   const { data: user } = useConvexQuery(api.users.getCurrentUser);
   const getUserByEmail = useMutation(api.users.getUserByEmail);

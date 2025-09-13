@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Linkedin, Github, UserPlus, Info } from "lucide-react";
+import { Linkedin, Github, UserPlus, Info, Download } from "lucide-react";
 
 export default function Footer({ onInvite }) {
   return (
@@ -58,6 +58,14 @@ export default function Footer({ onInvite }) {
               className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-white border border-gray-200 shadow-sm hover:bg-gray-100 transition focus:outline-none focus:ring-2 focus:ring-green-200"
             >
               <Github className="w-5 h-5 text-gray-700" />
+            </a>
+            <a
+              href="/install"
+              rel="noopener noreferrer"
+              aria-label="Install App"
+              className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-white border border-gray-200 shadow-sm hover:bg-green-50 transition focus:outline-none focus:ring-2 focus:ring-green-200"
+            >
+              <Download className="w-5 h-5 text-emerald-700" />
             </a>
           </div>
         </div>

@@ -1,5 +1,5 @@
 {
-  "name": "SmartSplit",
+  "name": "SmartSplit : Expense Sharing Made Easy",
   "short_name": "SmartSplit",
   "start_url": "/dashboard",
   "display": "fullscreen",
@@ -16,6 +16,41 @@
       "src": "/logos/logo-s.png",
       "sizes": "512x512",
       "type": "image/png"
+    }
+  ],
+  "description": "SmartSplit is a web application that simplifies expense sharing among friends and groups. Easily track, split, and settle expenses with an intuitive interface.",
+  "screenshots": [
+    {
+      "src": "/pwa/dashboard.jpg",
+      "type": "image/jpg",
+      "sizes": "1080x2212",
+      "form_factor": "narrow",
+      "label": "Dashboard view"
+    },
+    {
+      "src": "/pwa/expense.jpg",
+      "type": "image/jpg",
+      "sizes": "1080x2199",
+      "form_factor": "narrow",
+      "label": "Add Expense screen"
+    },{
+      "src": "/pwa/user.jpg",
+      "type": "image/jpg",
+      "sizes": "1080x2212",
+      "form_factor": "narrow",
+      "label": "User profile"
+    },{
+      "src": "/pwa/summary.jpg",
+      "type": "image/jpg",
+      "sizes": "1080x2221",
+      "form_factor": "narrow",
+      "label": "Summary view"
+    },{
+      "src": "/pwa/group.jpg",
+      "type": "image/jpg",
+      "sizes": "1080x2222",
+      "form_factor": "narrow",
+      "label": "Create new group"
     }
   ]
 }

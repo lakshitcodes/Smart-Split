@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/animate-ui/components/buttons/button";
-import { ArrowUpRight, ArrowRight } from "lucide-react";
+import { ArrowUpRight, ArrowRight, Download } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { FEATURES, STEPS, TESTIMONIALS } from "../lib/landing";
@@ -47,6 +47,16 @@ export default function Home() {
               className=" hover:gradient-button hover:text-white transition "
             >
               <Link href="#how-it-works">See how it works</Link>
+            </Button>
+            <Button
+              asChild
+              size={"lg"}
+              className=" hover:gradient-button hover:text-white transition "
+              variant="outline"
+            >
+              <Link href="/install">
+                Install App <Download className="ml-2 h-4 w-4" />
+              </Link>
             </Button>
           </div>
         </div>
