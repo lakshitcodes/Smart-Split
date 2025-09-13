@@ -2,7 +2,7 @@
   "name": "SmartSplit : Expense Sharing Made Easy",
   "short_name": "SmartSplit",
   "start_url": "/dashboard",
-  "display": "fullscreen",
+  "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#3b82f6",
   "orientation": "portrait",
