@@ -219,7 +219,18 @@ export const getSettlementData = query({
           balances[st.paidByUserId].owing -= st.amount;
         }
       }
-
+      for (const uid of Object.keys(balances)) {
+        let { owed, owing } = balances[uid];
+        let newOwing = Math.max(0, owing), newOwed = Math.max(0, owed);
+        if (owing < 0) {
+          newOwed += (-owing);
+        }
+        if (owed < 0) {
+          newOwing += (-owed);
+        }
+        balances[uid].owed = newOwed;
+        balances[uid].owing = newOwing;
+      }
       // ---------- shape result list
       const members = await Promise.all(
         Object.keys(balances).map((id) => ctx.db.get(id))
