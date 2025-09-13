@@ -18,55 +18,57 @@ export default function Footer({ onInvite }) {
           </div>
 
           {/* Middle: Actions */}
-          <div className="flex flex-row items-center justify-center md:justify-end gap-3 w-full">
-            <button
-              type="button"
-              onClick={() =>
-                onInvite ? onInvite() : (window.location.href = "/invite")
-              }
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium bg-white border border-gray-200 shadow-sm hover:bg-gradient-to-r hover:from-green-500 hover:to-teal-500 hover:text-white transition focus:outline-none focus:ring-2 focus:ring-green-200"
-            >
-              <UserPlus className="w-4 h-4" />
-              <span className="hidden sm:inline">Invite Friends</span>
-              <span className="sm:hidden">Invite</span>
-            </button>
+          <div className="flex flex-col md:flex-row items-center justify-center md:justify-end gap-3 w-full">
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() =>
+                  onInvite ? onInvite() : (window.location.href = "/invite")
+                }
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium bg-white border border-gray-200 shadow-sm hover:bg-gradient-to-r hover:from-green-500 hover:to-teal-500 hover:text-white transition focus:outline-none focus:ring-2 focus:ring-green-200"
+              >
+                <UserPlus className="w-4 h-4" />
+                <span className="hidden sm:inline">Invite Friends</span>
+                <span className="sm:hidden">Invite</span>
+              </button>
+              <Link
+                href="/about"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium bg-white border border-gray-200 shadow-sm transition focus:outline-none focus:ring-2 focus:ring-green-200 hover:bg-gradient-to-r hover:from-green-500 hover:to-teal-500 hover:text-white"
+              >
+                <Info className="w-4 h-4" />
+                <span className="hidden sm:inline">About</span>
+                <span className="sm:hidden">About</span>
+              </Link>
+            </div>
+            <div className=" flex gap-3">
+              <a
+                href="https://www.linkedin.com/in/jainlakshit/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-white border border-gray-200 shadow-sm hover:bg-blue-50 transition focus:outline-none focus:ring-2 focus:ring-green-200"
+              >
+                <Linkedin className="w-5 h-5 text-[#0A66C2]" />
+              </a>
 
-            <Link
-              href="/about"
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium bg-white border border-gray-200 shadow-sm transition focus:outline-none focus:ring-2 focus:ring-green-200 hover:bg-gradient-to-r hover:from-green-500 hover:to-teal-500 hover:text-white"
-            >
-              <Info className="w-4 h-4" />
-              <span className="hidden sm:inline">About</span>
-              <span className="sm:hidden">About</span>
-            </Link>
-
-            <a
-              href="https://www.linkedin.com/in/jainlakshit/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn"
-              className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-white border border-gray-200 shadow-sm hover:bg-blue-50 transition focus:outline-none focus:ring-2 focus:ring-green-200"
-            >
-              <Linkedin className="w-5 h-5 text-[#0A66C2]" />
-            </a>
-
-            <a
-              href="https://github.com/lakshitcodes/smart-split"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub"
-              className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-white border border-gray-200 shadow-sm hover:bg-gray-100 transition focus:outline-none focus:ring-2 focus:ring-green-200"
-            >
-              <Github className="w-5 h-5 text-gray-700" />
-            </a>
-            <a
-              href="/install"
-              rel="noopener noreferrer"
-              aria-label="Install App"
-              className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-white border border-gray-200 shadow-sm hover:bg-green-50 transition focus:outline-none focus:ring-2 focus:ring-green-200"
-            >
-              <Download className="w-5 h-5 text-emerald-700" />
-            </a>
+              <a
+                href="https://github.com/lakshitcodes/smart-split"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+                className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-white border border-gray-200 shadow-sm hover:bg-gray-100 transition focus:outline-none focus:ring-2 focus:ring-green-200"
+              >
+                <Github className="w-5 h-5 text-gray-700" />
+              </a>
+              <a
+                href="/install"
+                rel="noopener noreferrer"
+                aria-label="Install App"
+                className="inline-flex items-center justify-center h-10 w-10 rounded-lg bg-white border border-gray-200 shadow-sm hover:bg-green-50 transition focus:outline-none focus:ring-2 focus:ring-green-200"
+              >
+                <Download className="w-5 h-5 text-emerald-700" />
+              </a>
+            </div>
           </div>
         </div>
 
