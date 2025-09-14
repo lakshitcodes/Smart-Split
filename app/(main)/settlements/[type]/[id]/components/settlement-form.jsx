@@ -131,12 +131,29 @@ export default function SettlementForm({ entityType, entityData, onSuccess }) {
         return;
       }
 
+      console.log("🔍 Settlement Debug:", {
+        paymentType: data.paymentType,
+        selectedUserNetBalance: selectedUser.netBalance,
+        currentUserId: currentUser._id,
+        selectedUserId: selectedUser.userId,
+      });
+
       // Determine payer and receiver based on the selected payment type and balances
+      // When paymentType is "theyPaid", it means they paid you (they are payer, you are receiver)
+      // When paymentType is "youPaid", it means you paid them (you are payer, they are receiver)
       const paidByUserId =
         data.paymentType === "youPaid" ? currentUser._id : selectedUser.userId;
 
       const receivedByUserId =
         data.paymentType === "youPaid" ? selectedUser.userId : currentUser._id;
+
+      console.log("💰 Settlement Details:", {
+        paidByUserId,
+        receivedByUserId,
+        amount,
+        expectedDirection:
+          selectedUser.netBalance < 0 ? "They pay you" : "You pay them",
+      });
 
       await createSettlement.mutate({
         amount,
@@ -184,6 +201,22 @@ export default function SettlementForm({ entityType, entityData, onSuccess }) {
 
   // For group settlements, we need to select a member
   const [selectedGroupMemberId, setSelectedGroupMemberId] = useState(null);
+
+  // Set the correct payment type when a group member is selected
+  useEffect(() => {
+    if (selectedGroupMemberId && entityType === "group") {
+      const selectedUser = entityData.balances.find(
+        (m) => m.userId === selectedGroupMemberId
+      );
+      if (selectedUser) {
+        // If they owe you (negative netBalance), then they should pay ("theyPaid")
+        // If you owe them (positive netBalance), then you should pay ("youPaid")
+        const paymentType =
+          selectedUser.netBalance < 0 ? "theyPaid" : "youPaid";
+        setValue("paymentType", paymentType, { shouldValidate: true });
+      }
+    }
+  }, [selectedGroupMemberId, entityType, entityData, setValue]);
 
   if (!currentUser) return null;
 
@@ -275,29 +308,47 @@ export default function SettlementForm({ entityType, entityData, onSuccess }) {
         {/* Amount */}
         <div className="space-y-2">
           <Label htmlFor="amount">Amount</Label>
-          <div className="relative">
-            <span className="absolute left-3 top-2.5">₹</span>
-            <Input
-              id="amount"
-              placeholder="0.00"
-              type="number"
-              step="0.01"
-              min="0.01"
-              max={canSettle ? maxAmount : undefined}
-              disabled={!canSettle}
-              className="pl-7"
-              {...register("amount", {
-                onChange: (e) => {
-                  const v = parseFloat(e.target.value);
-                  if (canSettle && v > maxAmount) {
-                    e.target.value = maxAmount.toFixed(2).toString();
-                    toast.error(
-                      `Amount cannot exceed ${formatCurrency(maxAmount)}`
-                    );
-                  }
-                },
-              })}
-            />
+          <div className="relative flex gap-2">
+            <div className="relative flex-1">
+              <span className="absolute left-3 top-2.5">₹</span>
+              <Input
+                id="amount"
+                placeholder="0.00"
+                type="number"
+                step="0.01"
+                min="0.01"
+                max={canSettle ? parseFloat(maxAmount.toFixed(2)) : undefined}
+                disabled={!canSettle}
+                className="pl-7"
+                {...register("amount", {
+                  onChange: (e) => {
+                    const v = parseFloat(e.target.value);
+                    // Add small tolerance for floating-point comparison (1 cent)
+                    if (canSettle && v > maxAmount + 0.005) {
+                      e.target.value = maxAmount.toFixed(2).toString();
+                      toast.error(
+                        `Amount cannot exceed ${formatCurrency(maxAmount)}`
+                      );
+                    }
+                  },
+                })}
+              />
+            </div>
+            {canSettle && (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="px-3"
+                onClick={() => {
+                  setValue("amount", maxAmount.toFixed(2), {
+                    shouldValidate: true,
+                  });
+                }}
+              >
+                Max
+              </Button>
+            )}
           </div>
           {errors.amount && (
             <p className="text-sm text-red-500">{errors.amount.message}</p>
@@ -407,13 +458,8 @@ export default function SettlementForm({ entityType, entityData, onSuccess }) {
             {/* Payment direction */}
             <div className="space-y-2">
               <Label>Who paid?</Label>
-              <input
-                type="hidden"
-                {...register("paymentType")}
-                value={selectedTheyOweYou ? "theyPaid" : "youPaid"}
-              />
               <RadioGroup
-                value={selectedTheyOweYou ? "theyPaid" : "youPaid"}
+                value={paymentType}
                 className="flex flex-col space-y-2"
                 onValueChange={(value) =>
                   setValue("paymentType", value, { shouldValidate: true })
@@ -486,29 +532,51 @@ export default function SettlementForm({ entityType, entityData, onSuccess }) {
             {/* Amount */}
             <div className="space-y-2">
               <Label htmlFor="amount">Amount</Label>
-              <div className="relative">
-                <span className="absolute left-3 top-2.5">₹</span>
-                <Input
-                  id="amount"
-                  placeholder="0.00"
-                  type="number"
-                  step="0.01"
-                  min="0.01"
-                  max={canGroupSettle ? groupMaxAmount : undefined}
-                  disabled={!canGroupSettle}
-                  className="pl-7"
-                  {...register("amount", {
-                    onChange: (e) => {
-                      const v = parseFloat(e.target.value);
-                      if (canGroupSettle && v > groupMaxAmount) {
-                        e.target.value = groupMaxAmount.toFixed(2).toString();
-                        toast.warning(
-                          `Amount cannot exceed ${formatCurrency(groupMaxAmount)}`
-                        );
-                      }
-                    },
-                  })}
-                />
+              <div className="relative flex gap-2">
+                <div className="relative flex-1">
+                  <span className="absolute left-3 top-2.5">₹</span>
+                  <Input
+                    id="amount"
+                    placeholder="0.00"
+                    type="number"
+                    step="0.01"
+                    min="0.01"
+                    max={
+                      canGroupSettle
+                        ? parseFloat(groupMaxAmount.toFixed(2))
+                        : undefined
+                    }
+                    disabled={!canGroupSettle}
+                    className="pl-7"
+                    {...register("amount", {
+                      onChange: (e) => {
+                        const v = parseFloat(e.target.value);
+                        // Add small tolerance for floating-point comparison (1 cent)
+                        if (canGroupSettle && v > groupMaxAmount + 0.005) {
+                          e.target.value = groupMaxAmount.toFixed(2).toString();
+                          toast.warning(
+                            `Amount cannot exceed ${formatCurrency(groupMaxAmount)}`
+                          );
+                        }
+                      },
+                    })}
+                  />
+                </div>
+                {canGroupSettle && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="px-3"
+                    onClick={() => {
+                      setValue("amount", groupMaxAmount.toFixed(2), {
+                        shouldValidate: true,
+                      });
+                    }}
+                  >
+                    Max
+                  </Button>
+                )}
               </div>
               {errors.amount && (
                 <p className="text-sm text-red-500">{errors.amount.message}</p>

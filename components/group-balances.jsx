@@ -2,6 +2,11 @@
 
 import { api } from "@/convex/_generated/api";
 import { useConvexQuery } from "@/hooks/use-convex-query";
+import {
+  isSignificantBalance,
+  isSignificantPositiveBalance,
+  isSignificantNegativeBalance,
+} from "@/lib/balance-threshold";
 import { ArrowDownCircle, ArrowUpCircle, CheckCircle } from "lucide-react";
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
@@ -48,7 +53,7 @@ const GroupBalances = ({ balances }) => {
     .sort((a, b) => b.amount - a.amount);
 
   const isAllSettledUp =
-    me.totalBalance === 0 &&
+    !isSignificantBalance(me.totalBalance) &&
     owedByMembers.length === 0 &&
     owingToMembers.length === 0;
   return (
@@ -57,23 +62,23 @@ const GroupBalances = ({ balances }) => {
         <p className="text-sm text-muted-foreground mb-1">Your balance</p>
         <p
           className={`text-3xl font-extrabold ${
-            me.totalBalance > 0
+            isSignificantPositiveBalance(me.totalBalance)
               ? "text-green-600 drop-shadow-sm"
-              : me.totalBalance < 0
+              : isSignificantNegativeBalance(me.totalBalance)
                 ? "text-red-600 drop-shadow-sm"
                 : "text-muted-foreground"
           }`}
         >
-          {me.totalBalance > 0
+          {isSignificantPositiveBalance(me.totalBalance)
             ? `+${formatCurrency(me.totalBalance)}`
-            : me.totalBalance < 0
+            : isSignificantNegativeBalance(me.totalBalance)
               ? `-${formatCurrency(me.totalBalance)}`
               : "₹ 0.00"}
         </p>
         <p className="text-sm text-muted-foreground mt-1">
-          {me.totalBalance > 0
+          {isSignificantPositiveBalance(me.totalBalance)
             ? "You are owed money"
-            : me.totalBalance < 0
+            : isSignificantNegativeBalance(me.totalBalance)
               ? "You owe money"
               : "You are all settled up"}
         </p>

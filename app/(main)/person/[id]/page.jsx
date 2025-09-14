@@ -16,6 +16,11 @@ import {
 import { api } from "@/convex/_generated/api";
 import { useConvexQuery } from "@/hooks/use-convex-query";
 import { formatCurrency } from "@/lib/formatCurrency";
+import {
+  isSignificantBalance,
+  isSignificantPositiveBalance,
+  isSignificantNegativeBalance,
+} from "@/lib/balance-threshold";
 import { Avatar } from "@radix-ui/react-avatar";
 import {
   ArrowLeft,
@@ -248,7 +253,7 @@ const PersonPage = () => {
               <CardContent>
                 <div className="flex justify-between items-center">
                   <div>
-                    {balance === 0 ? (
+                    {!isSignificantBalance(balance) ? (
                       <p>You are all settled up</p>
                     ) : balance > 0 ? (
                       <p>
@@ -263,7 +268,7 @@ const PersonPage = () => {
                     )}
                   </div>
                   <div
-                    className={`text-2xl font-bold ${balance > 0 ? "text-green-600" : balance < 0 ? "text-red-600" : ""}`}
+                    className={`text-2xl font-bold ${isSignificantPositiveBalance(balance) ? "text-green-600" : isSignificantNegativeBalance(balance) ? "text-red-600" : ""}`}
                   >
                     {formatCurrency(Math.abs(balance))}
                   </div>

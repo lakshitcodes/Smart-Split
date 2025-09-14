@@ -18,6 +18,10 @@ import ExpenseSummary from "./components/expense-summary";
 import BalanceSummary from "./components/balance-summary";
 import GroupList from "./components/group-list";
 import { formatCurrency } from "@/lib/formatCurrency";
+import {
+  isSignificantPositiveBalance,
+  isSignificantNegativeBalance,
+} from "@/lib/balance-threshold";
 import { motion, AnimatePresence } from "framer-motion";
 
 const listVariants = {
@@ -102,11 +106,15 @@ const Dashboard = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold">
-                        {balances?.totalBalance > 0 ? (
+                        {isSignificantPositiveBalance(
+                          balances?.totalBalance || 0
+                        ) ? (
                           <span className="text-green-600">
                             +{formatCurrency(balances.totalBalance)}
                           </span>
-                        ) : balances?.totalBalance < 0 ? (
+                        ) : isSignificantNegativeBalance(
+                            balances?.totalBalance || 0
+                          ) ? (
                           <span className="text-red-500">
                             -{formatCurrency(Math.abs(balances.totalBalance))}
                           </span>
@@ -115,9 +123,13 @@ const Dashboard = () => {
                         )}
                       </div>
                       <p className="text-xs text-muted-foreground mt-1">
-                        {balances?.totalBalance > 0
+                        {isSignificantPositiveBalance(
+                          balances?.totalBalance || 0
+                        )
                           ? "You are owed money"
-                          : balances?.totalBalance < 0
+                          : isSignificantNegativeBalance(
+                                balances?.totalBalance || 0
+                              )
                             ? "You owe money"
                             : "All settled up!"}
                       </p>
@@ -137,13 +149,24 @@ const Dashboard = () => {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold text-green-600">
-                        {formatCurrency(balances?.youAreOwed || 0)}
-                      </div>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        From {balances?.oweDetails?.youAreOwedBy?.length || 0}{" "}
-                        people
-                      </p>
+                      {balances?.oweDetails?.youAreOwedBy?.length > 0 ? (
+                        <>
+                          <div className="text-2xl font-bold text-green-600">
+                            {formatCurrency(balances?.youAreOwed || 0)}
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            From {balances?.oweDetails?.youAreOwedBy?.length || 0}{" "}
+                            people
+                          </p>
+                        </>
+                      ) : (
+                        <>
+                          <div className="text-2xl font-bold">₹0.00</div>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            You don't owe from anyone
+                          </p>
+                        </>
+                      )}
                     </CardContent>
                   </Card>
                 </motion.div>

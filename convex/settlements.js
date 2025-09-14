@@ -242,6 +242,7 @@ export const getSettlementData = query({
         return {
           userId: uid,
           name: m?.name || "Unknown",
+          email: m?.email || "",
           imageUrl: m?.imageUrl,
           youAreOwed: owed,
           youOwe: owing,

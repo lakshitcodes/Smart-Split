@@ -1,4 +1,5 @@
 import { formatCurrency } from "@/lib/formatCurrency";
+import { isSignificantBalance } from "@/lib/balance-threshold";
 import { Users } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -19,7 +20,7 @@ const GroupList = ({ groups }) => {
     <div className="space-y-3">
       {groups.map((group) => {
         const balance = group.balance || 0;
-        const hasBalance = balance !== 0;
+        const hasBalance = isSignificantBalance(balance);
 
         return (
           <Link
